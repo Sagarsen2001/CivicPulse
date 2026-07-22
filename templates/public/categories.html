@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+Complaint Categories | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="page-banner">
+
+    <h1>
+        Complaint Categories
+    </h1>
+
+    <p>
+        Browse all available complaint categories.
+    </p>
+
+</section>
+
+<section class="about-section">
+
+    <h2 class="section-title">
+        Available Categories
+    </h2>
+
+    <div
+        id="categories-container"
+        class="feature-grid">
+
+    </div>
+
+</section>
+
+<script>
+
+fetch("/api/categories")
+
+.then(response => response.json())
+
+.then(data => {
+
+    const container = document.getElementById("categories-container");
+
+    if (!data.success) {
+
+        container.innerHTML = `
+            <p>Unable to load categories.</p>
+        `;
+
+        return;
+
+    }
+
+    data.categories.forEach(category => {
+
+        container.innerHTML += `
+
+            <div class="feature-card">
+
+                <h3>${category.category_name}</h3>
+
+                <p>${category.description}</p>
+
+            </div>
+
+        `;
+
+    });
+
+})
+
+.catch(error => {
+
+    console.error(error);
+
+    document.getElementById("categories-container").innerHTML = `
+        <p>Something went wrong while loading categories.</p>
+    `;
+
+});
+
+</script>
+
+{% endblock %}

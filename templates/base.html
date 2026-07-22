@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        {% block title %}
+        CivicPulse
+        {% endblock %}
+
+    </title>
+
+    <!-- Main CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/main.css') }}">
+
+    <!-- Home CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/home.css') }}">
+
+    <!-- Responsive CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/responsive.css') }}">
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header>
+
+        <nav class="navbar">
+
+            <div class="logo">
+
+                <a href="{{ url_for('public.home') }}">
+                    CivicPulse
+                </a>
+
+            </div>
+
+            <ul class="nav-links">
+
+                <li>
+
+                    <a href="{{ url_for('public.home') }}">
+                        Home
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('public.about') }}">
+                        About
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('public.how_it_works') }}">
+                        How It Works
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('public.categories') }}">
+                        Categories
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="#">
+                        Login
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="#">
+                        Register
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <!-- ================= PAGE CONTENT ================= -->
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <h3>
+                CivicPulse
+            </h3>
+
+            <p>
+                Smart Civic Complaint Management System
+            </p>
+
+            <p>
+                Empowering citizens to build cleaner, safer and smarter cities.
+            </p>
+
+            <p>
+                &copy; 2026 CivicPulse. All Rights Reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- ================= JavaScript ================= -->
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>

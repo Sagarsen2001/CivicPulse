@@ -1,0 +1,352 @@
+/* ===========================================
+   HERO SECTION
+=========================================== */
+
+.hero{
+
+    background:linear-gradient(135deg,#0f4c81,#1976d2);
+
+    color:white;
+
+    text-align:center;
+
+    padding:120px 20px;
+}
+
+.hero-content{
+
+    max-width:900px;
+
+    margin:auto;
+}
+
+.hero h1{
+
+    font-size:50px;
+
+    margin-bottom:25px;
+}
+
+.hero p{
+
+    font-size:20px;
+
+    margin-bottom:35px;
+
+    line-height:1.8;
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+/* ===========================================
+   STATISTICS
+=========================================== */
+
+.stats{
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:70px auto;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+}
+
+.stat-card{
+
+    background:white;
+
+    padding:35px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+}
+
+.stat-card h2{
+
+    font-size:38px;
+
+    color:#0f4c81;
+
+    margin-bottom:12px;
+}
+
+.stat-card p{
+
+    font-size:18px;
+
+    color:#555;
+}
+
+/* ===========================================
+   CATEGORY SECTION
+=========================================== */
+
+.categories{
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:80px auto;
+}
+
+.categories h2{
+
+    text-align:center;
+
+    font-size:36px;
+
+    color:#0f4c81;
+
+    margin-bottom:45px;
+}
+
+.category-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+}
+
+.category-card{
+
+    background:white;
+
+    padding:30px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.category-card:hover{
+
+    transform:translateY(-10px);
+
+    background:#f5fbff;
+}
+
+.category-card h3{
+
+    color:#0f4c81;
+
+    margin-bottom:15px;
+
+    font-size:24px;
+}
+
+.category-card p{
+
+    color:#555;
+
+    font-size:16px;
+}
+
+/* ===========================================
+   FEATURES
+=========================================== */
+
+.features{
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:80px auto;
+}
+
+.features h2{
+
+    text-align:center;
+
+    font-size:36px;
+
+    color:#0f4c81;
+
+    margin-bottom:45px;
+}
+
+/* ===========================================
+   WORKFLOW
+=========================================== */
+
+.workflow{
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:80px auto;
+}
+
+.workflow h2{
+
+    text-align:center;
+
+    font-size:36px;
+
+    color:#0f4c81;
+
+    margin-bottom:45px;
+}
+
+.workflow-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:20px;
+}
+
+.step{
+
+    background:white;
+
+    padding:30px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.step:hover{
+
+    transform:translateY(-8px);
+}
+
+.step h3{
+
+    width:60px;
+
+    height:60px;
+
+    background:#0f4c81;
+
+    color:white;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:0 auto 20px;
+
+    font-size:24px;
+}
+
+.step p{
+
+    color:#555;
+}
+
+/* ===========================================
+   CTA
+=========================================== */
+
+.cta{
+
+    background:#0f4c81;
+
+    color:white;
+
+    text-align:center;
+
+    padding:80px 20px;
+
+    margin-top:80px;
+}
+
+.cta h2{
+
+    font-size:40px;
+
+    margin-bottom:20px;
+}
+
+.cta p{
+
+    max-width:700px;
+
+    margin:auto;
+
+    font-size:18px;
+
+    line-height:1.7;
+
+    margin-bottom:35px;
+}
+
+.cta .btn{
+
+    background:#ffd54f;
+
+    color:#222;
+}
+
+.cta .btn:hover{
+
+    background:#ffca28;
+}
+
+/* ===========================================
+   ANIMATIONS
+=========================================== */
+
+.category-card,
+.feature-card,
+.stat-card,
+.about-card,
+.tech-card,
+.step{
+
+    transition:all .3s ease;
+}
+
+.category-card:hover,
+.feature-card:hover,
+.stat-card:hover,
+.about-card:hover,
+.tech-card:hover,
+.step:hover{
+
+    box-shadow:0 12px 25px rgba(0,0,0,.15);
+}

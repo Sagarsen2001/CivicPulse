@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+404 - Page Not Found | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="page-banner">
+
+    <h1>404</h1>
+
+    <p>
+        Page Not Found
+    </p>
+
+</section>
+
+<section class="about-section">
+
+    <div class="about-card text-center">
+
+        <h2>Oops!</h2>
+
+        <p>
+            The page you are looking for doesn't exist or has been moved.
+        </p>
+
+        <br>
+
+        <a href="{{ url_for('public.home') }}" class="btn btn-primary">
+            Return to Home
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

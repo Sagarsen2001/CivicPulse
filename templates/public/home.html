@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Smart Civic Complaint Management System
+        </h1>
+
+        <p>
+            Report civic issues like potholes, garbage, drainage,
+            streetlight failures, water leakage and track their
+            resolution in real time.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#" class="btn btn-primary">
+                Register Complaint
+            </a>
+
+            <a href="{{ url_for('public.how_it_works') }}"
+               class="btn btn-secondary">
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= STATISTICS ================= -->
+
+<section class="stats">
+
+    <div class="stat-card">
+
+        <h2>10,000+</h2>
+
+        <p>Complaints Submitted</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2>8,500+</h2>
+
+        <p>Complaints Resolved</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2>300+</h2>
+
+        <p>Active Workers</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2>25</h2>
+
+        <p>Departments</p>
+
+    </div>
+
+</section>
+
+<!-- ================= CATEGORY SECTION ================= -->
+
+<section class="categories">
+
+    <h2>Complaint Categories</h2>
+
+    <div class="category-grid">
+
+        <div class="category-card">
+
+            <h3>🛣️ Potholes</h3>
+
+            <p>
+                Report damaged roads and potholes.
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <h3>🗑️ Garbage</h3>
+
+            <p>
+                Report overflowing garbage bins.
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <h3>💡 Street Lights</h3>
+
+            <p>
+                Report damaged or non-functional street lights.
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <h3>🚰 Water Leakage</h3>
+
+            <p>
+                Report leaking pipelines and water wastage.
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <h3>🌧️ Drainage</h3>
+
+            <p>
+                Report blocked or overflowing drainage systems.
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <h3>🚦 Traffic Signal</h3>
+
+            <p>
+                Report malfunctioning traffic signals.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <h2>Why Choose CivicPulse?</h2>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+
+            <h3>📸 Photo Upload</h3>
+
+            <p>
+                Upload complaint images for faster verification.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>📍 Live Location</h3>
+
+            <p>
+                Submit complaint location accurately.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>📈 Track Status</h3>
+
+            <p>
+                Track complaint progress from submission to completion.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>⚡ Smart Priority</h3>
+
+            <p>
+                Urgent complaints are prioritized automatically.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>👷 Department Assignment</h3>
+
+            <p>
+                Complaints are assigned to the appropriate department.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>⭐ Citizen Feedback</h3>
+
+            <p>
+                Rate completed work and share your experience.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= WORKFLOW ================= -->
+
+<section class="workflow">
+
+    <h2>How CivicPulse Works</h2>
+
+    <div class="workflow-container">
+
+        <div class="step">
+
+            <h3>1</h3>
+
+            <p>
+                Citizen submits a complaint.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>2</h3>
+
+            <p>
+                Admin verifies the complaint.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>3</h3>
+
+            <p>
+                Complaint is assigned to the concerned department.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>4</h3>
+
+            <p>
+                Worker resolves the reported issue.
+            </p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>5</h3>
+
+            <p>
+                Citizen tracks status and submits feedback.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= CALL TO ACTION ================= -->
+
+<section class="cta">
+
+    <h2>
+        Help Build a Better City
+    </h2>
+
+    <p>
+        Join CivicPulse today and contribute towards a cleaner,
+        safer and smarter city by reporting civic issues.
+    </p>
+
+    <a href="#" class="btn btn-primary">
+        Report an Issue
+    </a>
+
+</section>
+
+{% endblock %}
