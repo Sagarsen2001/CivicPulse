@@ -1,10 +1,23 @@
-from flask import Flask, render_template
+"""
+=========================================
+CivicPulse Application
+=========================================
+
+Main entry point of the application.
+
+Author : Sagar Sen
+Project : CivicPulse
+"""
+
+from flask import Flask
+from flask import render_template
 
 from config import Config
 
-# Import Blueprints
 from routes import public_bp
 from routes import api_bp
+from routes import auth_bp
+from routes import citizen_bp
 
 
 # ==========================================
@@ -13,7 +26,6 @@ from routes import api_bp
 
 app = Flask(__name__)
 
-# Load Configuration
 app.config.from_object(Config)
 
 
@@ -25,6 +37,10 @@ app.register_blueprint(public_bp)
 
 app.register_blueprint(api_bp)
 
+app.register_blueprint(auth_bp)
+
+app.register_blueprint(citizen_bp)
+
 
 # ==========================================
 # Error Handlers
@@ -34,7 +50,9 @@ app.register_blueprint(api_bp)
 def page_not_found(error):
 
     return render_template(
+
         "errors/404.html"
+
     ), 404
 
 
@@ -42,7 +60,9 @@ def page_not_found(error):
 def internal_server_error(error):
 
     return render_template(
+
         "errors/500.html"
+
     ), 500
 
 
@@ -53,7 +73,7 @@ def internal_server_error(error):
 if __name__ == "__main__":
 
     app.run(
-        host="127.0.0.1",
-        port=5000,
+
         debug=True
+
     )

@@ -24,9 +24,23 @@ Home | CivicPulse
 
         <div class="hero-buttons">
 
-            <a href="#" class="btn btn-primary">
+            {% if session.get("user_id") %}
+
+            <a href="{{ url_for('citizen.report_issue') }}" class="btn btn-primary">
+
                 Register Complaint
+
             </a>
+
+            {% else %}
+
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+
+                Register Complaint
+
+            </a>
+
+            {% endif %}
 
             <a href="{{ url_for('public.how_it_works') }}"
                class="btn btn-secondary">
@@ -296,9 +310,23 @@ Home | CivicPulse
         safer and smarter city by reporting civic issues.
     </p>
 
-    <a href="#" class="btn btn-primary">
+    {% if session.get("user_id") %}
+
+    <a href="{{ url_for('citizen.report_issue') }}" class="btn btn-primary">
+
         Report an Issue
+
     </a>
+
+    {% else %}
+
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+
+        Report an Issue
+
+    </a>
+
+    {% endif %}
 
 </section>
 

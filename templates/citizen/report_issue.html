@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}
+Report Issue | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="form-section">
+
+    <div class="form-container">
+
+        <h1>
+
+            Report a Civic Issue
+
+        </h1>
+
+        <p class="form-subtitle">
+
+            Fill in the details below to report a civic issue.
+            Your complaint will be reviewed by the administration
+            and assigned to the appropriate department.
+
+        </p>
+
+        <form
+
+            id="complaintForm"
+
+            method="POST"
+
+            enctype="multipart/form-data"
+
+        >
+
+            <!-- ================= Title ================= -->
+
+            <div class="form-group">
+
+                <label for="title">
+
+                    Complaint Title
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="title"
+
+                    name="title"
+
+                    placeholder="Example: Large pothole near City Hospital"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Category ================= -->
+
+            <div class="form-group">
+
+                <label for="category">
+
+                    Category
+
+                </label>
+
+                <select
+
+                    id="category"
+
+                    name="category"
+
+                    required
+
+                >
+
+                    <option value="">
+
+                        Select Category
+
+                    </option>
+
+                    <option>
+
+                        Garbage
+
+                    </option>
+
+                    <option>
+
+                        Pothole
+
+                    </option>
+
+                    <option>
+
+                        Drainage
+
+                    </option>
+
+                    <option>
+
+                        Street Light
+
+                    </option>
+
+                    <option>
+
+                        Water Leakage
+
+                    </option>
+
+                    <option>
+
+                        Traffic Signal
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- ================= Severity ================= -->
+
+            <div class="form-group">
+
+                <label for="severity">
+
+                    Severity
+
+                </label>
+
+                <select
+
+                    id="severity"
+
+                    name="severity"
+
+                    required
+
+                >
+
+                    <option value="">
+
+                        Select Severity
+
+                    </option>
+
+                    <option>
+
+                        Low
+
+                    </option>
+
+                    <option>
+
+                        Medium
+
+                    </option>
+
+                    <option>
+
+                        High
+
+                    </option>
+
+                    <option>
+
+                        Critical
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- ================= Location ================= -->
+
+            <div class="form-group">
+
+                <label for="location">
+
+                    Location
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="location"
+
+                    name="location"
+
+                    placeholder="Enter complaint location"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Description ================= -->
+
+            <div class="form-group">
+
+                <label for="description">
+
+                    Description
+
+                </label>
+
+                <textarea
+
+                    id="description"
+
+                    name="description"
+
+                    rows="6"
+
+                    placeholder="Describe the issue in detail..."
+
+                    required
+
+                ></textarea>
+
+            </div>
+
+            <!-- ================= Image ================= -->
+
+            <div class="form-group">
+
+                <label for="image">
+
+                    Upload Image
+
+                </label>
+
+                <input
+
+                    type="file"
+
+                    id="image"
+
+                    name="image"
+
+                    accept="image/*"
+
+                >
+
+            </div>
+
+            <!-- ================= Preview ================= -->
+
+            <div class="form-group">
+
+                <img
+
+                    id="previewImage"
+
+                    src=""
+
+                    alt="Image Preview"
+
+                    style="display:none; max-width:300px; border-radius:10px;"
+
+                >
+
+            </div>
+
+            <!-- ================= Buttons ================= -->
+
+            <div class="form-buttons">
+
+                <button
+
+                    type="submit"
+
+                    class="btn btn-primary"
+
+                >
+
+                    Submit Complaint
+
+                </button>
+
+                <button
+
+                    type="reset"
+
+                    class="btn btn-secondary"
+
+                >
+
+                    Reset
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+<script src="{{ url_for('static', filename='js/complaint_form.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/image_preview.js') }}"></script>
+
+{% endblock %}

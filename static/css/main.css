@@ -390,3 +390,140 @@ footer{
 
     margin-bottom:40px;
 }
+/*=========================================
+    Day 8 Navbar Updates
+=========================================*/
+
+/* Navbar */
+
+.navbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 50px;
+
+    background:#1e3a8a;
+
+}
+
+
+/* Navigation */
+
+.nav-links{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    list-style:none;
+
+}
+
+
+/* Navigation Links */
+
+.nav-links li a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:500;
+
+    transition:0.3s;
+
+}
+
+
+.nav-links li a:hover{
+
+    color:#fbbf24;
+
+}
+
+
+/* Welcome Text */
+
+.nav-links span{
+
+    color:white;
+
+    font-weight:bold;
+
+}
+
+
+/* Flash Messages */
+
+.flash-container{
+
+    width:90%;
+
+    max-width:900px;
+
+    margin:20px auto;
+
+}
+
+
+.flash-message{
+
+    padding:15px;
+
+    border-radius:8px;
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+
+/* Success */
+
+.flash-success{
+
+    background:#d1fae5;
+
+    color:#065f46;
+
+}
+
+
+/* Error */
+
+.flash-danger{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+/* Information */
+
+.flash-info{
+
+    background:#dbeafe;
+
+    color:#1e40af;
+
+}
+
+
+/* Warning */
+
+.flash-warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}

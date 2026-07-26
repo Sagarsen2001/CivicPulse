@@ -11,7 +11,9 @@
     <title>
 
         {% block title %}
+
         CivicPulse
+
         {% endblock %}
 
     </title>
@@ -25,6 +27,16 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/home.css') }}">
+
+    <!-- Authentication CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/auth.css') }}">
+
+    <!-- Forms CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/forms.css') }}">
 
     <!-- Responsive CSS -->
 
@@ -44,7 +56,9 @@
             <div class="logo">
 
                 <a href="{{ url_for('public.home') }}">
+
                     CivicPulse
+
                 </a>
 
             </div>
@@ -54,7 +68,9 @@
                 <li>
 
                     <a href="{{ url_for('public.home') }}">
+
                         Home
+
                     </a>
 
                 </li>
@@ -62,7 +78,9 @@
                 <li>
 
                     <a href="{{ url_for('public.about') }}">
+
                         About
+
                     </a>
 
                 </li>
@@ -70,7 +88,9 @@
                 <li>
 
                     <a href="{{ url_for('public.how_it_works') }}">
+
                         How It Works
+
                     </a>
 
                 </li>
@@ -78,26 +98,80 @@
                 <li>
 
                     <a href="{{ url_for('public.categories') }}">
+
                         Categories
+
                     </a>
 
                 </li>
 
-                <li>
+                <!-- ================= Logged In ================= -->
 
-                    <a href="#">
-                        Login
-                    </a>
+                {% if session.get("user_id") %}
 
-                </li>
+                    {% if session.get("user_role") == "Citizen" %}
 
-                <li>
+                        <li>
 
-                    <a href="#">
-                        Register
-                    </a>
+                            <a href="{{ url_for('citizen.report_issue') }}">
 
-                </li>
+                                Report Issue
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                    <li>
+
+                        <span>
+
+                            Welcome,
+
+                            <strong>
+
+                                {{ session.get("user_name") }}
+
+                            </strong>
+
+                        </span>
+
+                    </li>
+
+                    <li>
+
+                        <a href="{{ url_for('auth.logout') }}">
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                {% else %}
+
+                    <li>
+
+                        <a href="{{ url_for('auth.login') }}">
+
+                            Login
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="{{ url_for('auth.register') }}">
+
+                            Register
+
+                        </a>
+
+                    </li>
+
+                {% endif %}
 
             </ul>
 
@@ -105,7 +179,31 @@
 
     </header>
 
-    <!-- ================= PAGE CONTENT ================= -->
+    <!-- ================= Flash Messages ================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message flash-{{ category }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+    <!-- ================= Page Content ================= -->
 
     <main>
 
@@ -115,35 +213,23 @@
 
     </main>
 
-    <!-- ================= FOOTER ================= -->
+    <!-- ================= Footer ================= -->
 
     <footer>
 
-        <div class="footer-content">
+        <p>
 
-            <h3>
-                CivicPulse
-            </h3>
+            © 2026 CivicPulse | Smart Civic Complaint Management System
 
-            <p>
-                Smart Civic Complaint Management System
-            </p>
-
-            <p>
-                Empowering citizens to build cleaner, safer and smarter cities.
-            </p>
-
-            <p>
-                &copy; 2026 CivicPulse. All Rights Reserved.
-            </p>
-
-        </div>
+        </p>
 
     </footer>
 
     <!-- ================= JavaScript ================= -->
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 
 </body>
 

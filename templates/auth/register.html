@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h2>
+
+            Create Your Account
+
+        </h2>
+
+        <p class="auth-subtitle">
+
+            Join CivicPulse and help build a smarter, cleaner city.
+
+        </p>
+
+        <form
+
+            id="registerForm"
+
+            class="auth-form"
+
+            method="POST"
+
+            action="{{ url_for('auth.register') }}"
+
+        >
+
+            <!-- ================= Full Name ================= -->
+
+            <div class="form-group">
+
+                <label for="full_name">
+
+                    Full Name
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="full_name"
+
+                    name="full_name"
+
+                    placeholder="Enter your full name"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Email ================= -->
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    Email Address
+
+                </label>
+
+                <input
+
+                    type="email"
+
+                    id="email"
+
+                    name="email"
+
+                    placeholder="Enter your email"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Phone Number ================= -->
+
+            <div class="form-group">
+
+                <label for="phone_number">
+
+                    Phone Number
+
+                </label>
+
+                <input
+
+                    type="tel"
+
+                    id="phone_number"
+
+                    name="phone_number"
+
+                    placeholder="Enter your phone number"
+
+                    maxlength="10"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Password ================= -->
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+                <input
+
+                    type="password"
+
+                    id="password"
+
+                    name="password"
+
+                    placeholder="Create a password"
+
+                    required
+
+                >
+
+                <small>
+
+                    Password must contain at least 8 characters,
+                    one uppercase letter, one lowercase letter,
+                    one number, and one special character.
+
+                </small>
+
+            </div>
+
+            <!-- ================= Confirm Password ================= -->
+
+            <div class="form-group">
+
+                <label for="confirm_password">
+
+                    Confirm Password
+
+                </label>
+
+                <input
+
+                    type="password"
+
+                    id="confirm_password"
+
+                    name="confirm_password"
+
+                    placeholder="Confirm your password"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Terms ================= -->
+
+            <div class="terms">
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        required
+
+                    >
+
+                    I agree to the
+
+                    <a href="#">
+
+                        Terms & Conditions
+
+                    </a>
+
+                    and
+
+                    <a href="#">
+
+                        Privacy Policy
+
+                    </a>
+
+                </label>
+
+            </div>
+
+            <!-- ================= Register Button ================= -->
+
+            <button
+
+                type="submit"
+
+                class="auth-btn"
+
+            >
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <!-- ================= Divider ================= -->
+
+        <div class="divider">
+
+            <span>
+
+                OR
+
+            </span>
+
+        </div>
+
+        <!-- ================= Login ================= -->
+
+        <div class="auth-footer">
+
+            Already have an account?
+
+            <a href="{{ url_for('auth.login') }}">
+
+                Login Here
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

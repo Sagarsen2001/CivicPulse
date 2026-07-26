@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+Access Denied | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>
+
+            🚫 Access Denied
+
+        </h1>
+
+        <p class="auth-subtitle">
+
+            You do not have permission to access this page.
+
+        </p>
+
+        <p>
+
+            This page is restricted based on your account role.
+            If you believe this is a mistake, please contact
+            the system administrator.
+
+        </p>
+
+        <div style="margin-top:30px;">
+
+            <a
+
+                href="{{ url_for('public.home') }}"
+
+                class="auth-btn"
+
+                style="text-decoration:none; display:inline-block; text-align:center;"
+
+            >
+
+                Return to Home
+
+            </a>
+
+        </div>
+
+        <div class="auth-footer">
+
+            <p>
+
+                Need a different account?
+
+                <a href="{{ url_for('auth.login') }}">
+
+                    Login Again
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

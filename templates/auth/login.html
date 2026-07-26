@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h2>
+
+            Welcome Back
+
+        </h2>
+
+        <p class="auth-subtitle">
+
+            Login to continue using CivicPulse
+
+        </p>
+
+        <form
+
+            id="loginForm"
+
+            class="auth-form"
+
+            method="POST"
+
+            action="{{ url_for('auth.login') }}"
+
+        >
+
+            <!-- ================= Email ================= -->
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    Email Address
+
+                </label>
+
+                <input
+
+                    type="email"
+
+                    id="email"
+
+                    name="email"
+
+                    placeholder="Enter your email"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Password ================= -->
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+                <input
+
+                    type="password"
+
+                    id="password"
+
+                    name="password"
+
+                    placeholder="Enter your password"
+
+                    required
+
+                >
+
+            </div>
+
+            <!-- ================= Remember Me ================= -->
+
+            <div class="remember-forgot">
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="remember"
+
+                    >
+
+                    Remember Me
+
+                </label>
+
+                <a href="#">
+
+                    Forgot Password?
+
+                </a>
+
+            </div>
+
+            <!-- ================= Login Button ================= -->
+
+            <button
+
+                type="submit"
+
+                class="auth-btn"
+
+            >
+
+                Login
+
+            </button>
+
+        </form>
+
+        <!-- ================= Divider ================= -->
+
+        <div class="divider">
+
+            <span>
+
+                OR
+
+            </span>
+
+        </div>
+
+        <!-- ================= Register ================= -->
+
+        <div class="auth-footer">
+
+            Don't have an account?
+
+            <a href="{{ url_for('auth.register') }}">
+
+                Register Here
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
