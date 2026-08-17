@@ -1,14 +1,26 @@
 # 🚀 CivicPulse
 
+<table>
+<tr>
+<td>
+
 > **Smart Civic Complaint Management System** built using **Python, Flask, Oracle Database, HTML, CSS, and JavaScript**.
 
 CivicPulse is a web-based civic complaint management platform that allows citizens to report public issues, upload supporting images, track complaint status, and monitor the progress of their complaints.
 
 The system is designed with separate layers for presentation, routing, business logic, data access, and database management, making it easier to maintain and extend.
 
----
+</td>
+</tr>
+</table>
 
-# 📌 Overview
+<br>
+
+<table>
+<tr>
+<td>
+
+## 📌 Overview
 
 CivicPulse addresses common problems in traditional civic complaint systems by providing a centralized digital platform for:
 
@@ -27,11 +39,19 @@ CivicPulse addresses common problems in traditional civic complaint systems by p
 - Administrative monitoring
 - Analytics and reporting
 
----
+</td>
+</tr>
+</table>
 
-# ✨ Key Features
+<br>
 
-## 👤 Citizen Module
+<table>
+<tr>
+<td>
+
+## ✨ Key Features
+
+### 👤 Citizen Module
 
 - User Registration
 - Secure Login
@@ -52,11 +72,9 @@ CivicPulse addresses common problems in traditional civic complaint systems by p
 - Copy Complaint ID
 - Provide Feedback After Resolution
 
----
+### 🛠️ Admin Module
 
-## 🛠️ Admin Module
-
-Planned / under development:
+**Planned / Under Development**
 
 - Admin Authentication
 - Department Management
@@ -68,11 +86,9 @@ Planned / under development:
 - Complaint Monitoring
 - Analytics Dashboard
 
----
+### 👷 Worker Module
 
-## 👷 Worker Module
-
-Planned / under development:
+**Planned / Under Development**
 
 - Worker Authentication
 - Assigned Complaint List
@@ -82,10 +98,17 @@ Planned / under development:
 - Upload Resolution Proof
 - Mark Complaint as Resolved
 
----
+</td>
+</tr>
+</table>
 
+<br>
 
-# 🏗️ System Architecture
+<table>
+<tr>
+<td>
+
+## 🏗️ System Architecture
 
 CivicPulse follows a **layered Flask architecture**.
 
@@ -148,8 +171,9 @@ CivicPulse follows a **layered Flask architecture**.
                          │ STATUS_HISTORY       │
                          └──────────────────────┘
 
-<table> <tr> <td>
- 🔄 Complaint Submission Flow
+</td> </tr> </table> <br> <table> <tr> <td>
+
+🔄 Complaint Submission Flow
 
 The complaint submission process follows this flow:
 
@@ -201,9 +225,9 @@ Citizen Dashboard
 </td> </tr> </table>
 
 
-<table> <tr> <td>
+</td> </tr> </table> <br> <table> <tr> <td>
 
-## 🖼️ Complaint Image Upload Flow
+🖼️ Complaint Image Upload Flow
 Citizen
    │
    ▼
@@ -227,8 +251,7 @@ Store Image Path
 Oracle COMPLAINTS
 The actual image file is stored in the application's upload directory, while the corresponding image path is stored in Oracle.
 
-</td> </tr> </table>
-
+</td> </tr> </table> <br> <table> <tr> <td>
 📊 Complaint Tracking Flow
 Citizen
    │
@@ -255,6 +278,7 @@ STATUS_HISTORY
    ├── In Progress
    ├── Resolved
    └── Rejected
+</td> </tr> </table> <br> <table> <tr> <td>
 
 
 🗄️ Database Architecture
@@ -287,6 +311,7 @@ Main Tables
 | `COMPLAINTS`       | Stores complaint information               |
 | `STATUS_HISTORY`   | Stores complaint status changes            |
 
+</td> </tr> </table> <br> <table> <tr> <td>
 
 
 📂 Project Structure
@@ -383,6 +408,7 @@ CivicPulse/
 | Version Control      | Git                     |
 | Repository           | GitHub                  |
 
+</td> </tr> </table> <br> <table> <tr> <td>
 
 🔐 Security
 
@@ -491,6 +517,7 @@ Status Timeline
 Admin Dashboard
 Worker Dashboard
 Analytics Dashboard
+</td> </tr> </table> <br> <table> <tr> <td>
 
 
 📜 License
