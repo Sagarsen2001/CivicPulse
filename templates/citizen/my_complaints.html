@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Complaints | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="citizen-dashboard">
+
+    <div class="dashboard-container">
+
+        <!-- ==========================
+             Page Header
+        =========================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>
+                    My Complaints
+                </h1>
+
+                <p>
+                    View, search and track all the civic complaints
+                    you have submitted.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('citizen.report_issue') }}"
+                class="btn btn-primary"
+            >
+                Report New Issue
+            </a>
+
+        </div>
+
+
+        <!-- ==========================
+             Search and Filter
+        =========================== -->
+
+        <div class="complaint-controls">
+
+            <div class="search-box">
+
+                <label for="complaintSearch">
+                    Search Complaints
+                </label>
+
+                <input
+                    type="text"
+                    id="complaintSearch"
+                    placeholder="Search by complaint title, location or description..."
+                >
+
+            </div>
+
+
+            <div class="filter-box">
+
+                <label for="statusFilter">
+                    Filter by Status
+                </label>
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        All Statuses
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                    <option value="verified">
+                        Verified
+                    </option>
+
+                    <option value="assigned">
+                        Assigned
+                    </option>
+
+                    <option value="in progress">
+                        In Progress
+                    </option>
+
+                    <option value="resolved">
+                        Resolved
+                    </option>
+
+                    <option value="rejected">
+                        Rejected
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================
+             Complaint Count
+        =========================== -->
+
+        <div class="complaint-count">
+
+            <p>
+
+                Showing
+
+                <strong id="visibleComplaintCount">
+                    {{ complaints|length }}
+                </strong>
+
+                complaint(s)
+
+            </p>
+
+        </div>
+
+
+        <!-- ==========================
+             Complaints
+        =========================== -->
+
+        {% if complaints %}
+
+            <div
+                id="complaintsContainer"
+                class="complaint-grid"
+            >
+
+                {% for complaint in complaints %}
+
+                    <article
+                        class="complaint-card complaint-item"
+                        data-status="{{ complaint[8]|lower }}"
+                        data-search="
+                            {{ complaint[2]|lower }}
+                            {{ complaint[3]|lower }}
+                            {{ complaint[5]|lower }}
+                        "
+                    >
+
+                        <!-- ==========================
+                             Complaint Header
+                        =========================== -->
+
+                        <div class="complaint-card-header">
+
+                            <span class="complaint-id">
+
+                                Complaint #{{ complaint[0] }}
+
+                            </span>
+
+                            <span
+                                class="
+                                    status-badge
+                                    status-{{ complaint[8]|lower|replace(' ', '-') }}
+                                "
+                            >
+
+                                {{ complaint[8] }}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- ==========================
+                             Complaint Title
+                        =========================== -->
+
+                        <h3>
+
+                            {{ complaint[2] }}
+
+                        </h3>
+
+
+                        <!-- ==========================
+                             Description
+                        =========================== -->
+
+                        <p class="complaint-description">
+
+                            {{ complaint[3] }}
+
+                        </p>
+
+
+                        <!-- ==========================
+                             Complaint Information
+                        =========================== -->
+
+                        <div class="complaint-meta">
+
+                            <span>
+                                📍 {{ complaint[5] }}
+                            </span>
+
+                            <span>
+                                ⚠️ {{ complaint[4] }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="complaint-meta">
+
+                            <span>
+                                ⭐ Priority: {{ complaint[7] }}
+                            </span>
+
+                            <span>
+                                📅 {{ complaint[9] }}
+                            </span>
+
+                        </div>
+
+
+                        <!-- ==========================
+                             Footer
+                        =========================== -->
+
+                        <div class="complaint-card-footer">
+
+                            <a
+                                href="{{ url_for(
+                                    'citizen.complaint_details',
+                                    complaint_id=complaint[0]
+                                ) }}"
+                                class="btn btn-secondary"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- ==========================
+                 No Search Result
+            =========================== -->
+
+            <div
+                id="noResults"
+                class="empty-state"
+                style="display:none;"
+            >
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    No Complaints Found
+                </h3>
+
+                <p>
+                    No complaint matches your current search or filter.
+                </p>
+
+            </div>
+
+        {% else %}
+
+            <!-- ==========================
+                 No Complaints
+            =========================== -->
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h3>
+                    No Complaints Yet
+                </h3>
+
+                <p>
+                    You have not submitted any civic complaints yet.
+                </p>
+
+                <a
+                    href="{{ url_for('citizen.report_issue') }}"
+                    class="btn btn-primary"
+                >
+                    Report Your First Issue
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- ==========================
+     Citizen Dashboard JS
+=========================== -->
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/citizen_dashboard.js'
+    ) }}"
+></script>
+
+{% endblock %}

@@ -1,0 +1,572 @@
+/* =========================================
+   CivicPulse Complaint Timeline
+   ========================================= */
+
+
+/* =========================================
+   Complaint Detail Title
+   ========================================= */
+
+.details-title-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.complaint-detail-title {
+
+    margin-top: 15px;
+
+    color: #1f2937;
+
+    line-height: 1.4;
+
+}
+
+
+.complaint-id-copy {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 7px;
+
+}
+
+
+.complaint-id-copy strong {
+
+    font-size: 18px;
+
+    color: #1e3a8a;
+
+}
+
+
+/* =========================================
+   Copy Button
+   ========================================= */
+
+.copy-btn {
+
+    width: 35px;
+
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #d1d5db;
+
+    background: #ffffff;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+.copy-btn:hover {
+
+    background: #f3f4f6;
+
+}
+
+
+.copy-btn.copied {
+
+    background: #d1fae5;
+
+    border-color: #10b981;
+
+}
+
+
+/* =========================================
+   Complaint Image
+   ========================================= */
+
+.complaint-image-container {
+
+    width: 100%;
+
+    max-width: 700px;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    border: 1px solid #e5e7eb;
+
+}
+
+
+.complaint-detail-image {
+
+    display: block;
+
+    width: 100%;
+
+    max-height: 500px;
+
+    object-fit: contain;
+
+    cursor: zoom-in;
+
+    background: #f9fafb;
+
+    transition: transform 0.25s ease;
+
+}
+
+
+.complaint-detail-image:hover {
+
+    transform: scale(1.02);
+
+}
+
+
+/* =========================================
+   Image Modal
+   ========================================= */
+
+.image-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+    background: rgba(0, 0, 0, 0.85);
+
+}
+
+
+.image-modal-content {
+
+    position: relative;
+
+    width: min(1000px, 95vw);
+
+    max-height: 90vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.image-modal-content img {
+
+    display: block;
+
+    max-width: 100%;
+
+    max-height: 85vh;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+}
+
+
+.close-modal {
+
+    position: absolute;
+
+    top: -45px;
+
+    right: 0;
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================
+   Timeline
+   ========================================= */
+
+.timeline {
+
+    position: relative;
+
+    margin: 30px 0;
+
+    padding-left: 42px;
+
+}
+
+
+.timeline::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 12px;
+
+    top: 5px;
+
+    bottom: 5px;
+
+    width: 3px;
+
+    background: #dbeafe;
+
+}
+
+
+/* =========================================
+   Timeline Item
+   ========================================= */
+
+.timeline-item {
+
+    position: relative;
+
+    display: flex;
+
+    gap: 20px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.timeline-item:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+/* =========================================
+   Timeline Marker
+   ========================================= */
+
+.timeline-marker {
+
+    position: absolute;
+
+    left: -42px;
+
+    top: 2px;
+
+    width: 27px;
+
+    height: 27px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 3px solid #ffffff;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    box-shadow: 0 0 0 2px #bfdbfe;
+
+    z-index: 1;
+
+}
+
+
+/* =========================================
+   Timeline Content
+   ========================================= */
+
+.timeline-content {
+
+    width: 100%;
+
+    padding: 18px 20px;
+
+    background: #f9fafb;
+
+    border-radius: 10px;
+
+    border: 1px solid #e5e7eb;
+
+}
+
+
+.timeline-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.timeline-header h4 {
+
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 17px;
+
+}
+
+
+.timeline-header span {
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+
+}
+
+
+.timeline-content p {
+
+    margin: 7px 0;
+
+    color: #555;
+
+    line-height: 1.6;
+
+}
+
+
+.timeline-content small {
+
+    display: block;
+
+    margin-top: 10px;
+
+    color: #6b7280;
+
+}
+
+
+/* =========================================
+   Timeline Empty State
+   ========================================= */
+
+.timeline-empty {
+
+    padding: 35px 20px;
+
+    text-align: center;
+
+    background: #f9fafb;
+
+    border-radius: 10px;
+
+    border: 1px dashed #d1d5db;
+
+}
+
+
+.timeline-empty h4 {
+
+    margin-bottom: 8px;
+
+    color: #374151;
+
+}
+
+
+.timeline-empty p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+}
+
+
+/* =========================================
+   Timeline Status Colors
+   ========================================= */
+
+.timeline-item:first-child .timeline-marker {
+
+    background: #f59e0b;
+
+    box-shadow: 0 0 0 2px #fde68a;
+
+}
+
+
+.timeline-item:last-child .timeline-marker {
+
+    background: #10b981;
+
+    box-shadow: 0 0 0 2px #a7f3d0;
+
+}
+
+
+/* =========================================
+   Details Actions
+   ========================================= */
+
+.details-actions {
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    gap: 15px;
+
+    margin-top: 30px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #eeeeee;
+
+}
+
+
+/* =========================================
+   Responsive
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .details-title-row {
+
+        flex-direction: column;
+
+    }
+
+
+    .timeline {
+
+        padding-left: 35px;
+
+    }
+
+
+    .timeline::before {
+
+        left: 9px;
+
+    }
+
+
+    .timeline-marker {
+
+        left: -35px;
+
+        width: 24px;
+
+        height: 24px;
+
+    }
+
+
+    .timeline-header {
+
+        flex-direction: column;
+
+    }
+
+
+    .timeline-header span {
+
+        white-space: normal;
+
+    }
+
+
+    .details-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .details-actions .btn {
+
+        width: 100%;
+
+        text-align: center;
+
+    }
+
+
+    .image-modal {
+
+        padding: 15px;
+
+    }
+
+
+    .close-modal {
+
+        top: -42px;
+
+    }
+
+}

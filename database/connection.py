@@ -9,15 +9,14 @@ Author : Sagar Sen
 Project: CivicPulse
 """
 
-import os
-import sys
 import oracledb
-
-# Add project root to Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import Config
 
+
+# ==========================================
+# Create Oracle Connection
+# ==========================================
 
 def get_connection():
     """
@@ -27,13 +26,9 @@ def get_connection():
     try:
 
         connection = oracledb.connect(
-
             user=Config.ORACLE_USER,
-
             password=Config.ORACLE_PASSWORD,
-
             dsn=Config.ORACLE_DSN
-
         )
 
         print("✅ Oracle Database Connected Successfully.")
@@ -43,11 +38,14 @@ def get_connection():
     except oracledb.DatabaseError as error:
 
         print("❌ Database Connection Error:")
-
         print(error)
 
         return None
 
+
+# ==========================================
+# Close Oracle Connection
+# ==========================================
 
 def close_connection(connection):
     """
@@ -56,9 +54,16 @@ def close_connection(connection):
 
     if connection:
 
-        connection.close()
+        try:
 
-        print("✅ Oracle Database Connection Closed.")
+            connection.close()
+
+            print("✅ Oracle Database Connection Closed.")
+
+        except oracledb.DatabaseError as error:
+
+            print("❌ Error Closing Database Connection:")
+            print(error)
 
 
 # ==========================================
@@ -69,12 +74,18 @@ if __name__ == "__main__":
 
     print("Testing Oracle Connection...\n")
 
-    print("Oracle User :", Config.ORACLE_USER)
+    print(
+        "Oracle User :",
+        Config.ORACLE_USER
+    )
 
-    print("Oracle DSN  :", Config.ORACLE_DSN)
+    print(
+        "Oracle DSN  :",
+        Config.ORACLE_DSN
+    )
 
-    conn = get_connection()
+    connection = get_connection()
 
-    if conn:
+    if connection:
 
-        close_connection(conn)
+        close_connection(connection)

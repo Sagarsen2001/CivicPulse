@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block title %}
+Citizen Dashboard | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<section class="citizen-dashboard">
+
+    <div class="dashboard-container">
+
+        <!-- ==========================
+             Dashboard Header
+        =========================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>
+                    Welcome, {{ session.get("user_name", "Citizen") }}
+                </h1>
+
+                <p>
+                    Manage and track all your civic complaints
+                    from one place.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('citizen.report_issue') }}"
+                class="btn btn-primary"
+            >
+                Report New Issue
+            </a>
+
+        </div>
+
+
+        <!-- ==========================
+             Summary Cards
+        =========================== -->
+
+        <div class="summary-grid">
+
+            <!-- Total -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    📋
+                </div>
+
+                <div class="summary-content">
+
+                    <h3>
+                        Total Complaints
+                    </h3>
+
+                    <p
+                        id="totalComplaints"
+                        class="summary-number"
+                    >
+                        {{ total_complaints | default(0) }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    ⏳
+                </div>
+
+                <div class="summary-content">
+
+                    <h3>
+                        Pending
+                    </h3>
+
+                    <p
+                        id="pendingComplaints"
+                        class="summary-number"
+                    >
+                        {{ pending_complaints | default(0) }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- In Progress -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    🔧
+                </div>
+
+                <div class="summary-content">
+
+                    <h3>
+                        In Progress
+                    </h3>
+
+                    <p
+                        id="inProgressComplaints"
+                        class="summary-number"
+                    >
+                        {{ in_progress_complaints | default(0) }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Resolved -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    ✅
+                </div>
+
+                <div class="summary-content">
+
+                    <h3>
+                        Resolved
+                    </h3>
+
+                    <p
+                        id="resolvedComplaints"
+                        class="summary-number"
+                    >
+                        {{ resolved_complaints | default(0) }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================
+             Recent Complaints
+        =========================== -->
+
+        <div class="dashboard-section">
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Complaints
+                </h2>
+
+                <a
+                    href="{{ url_for('citizen.my_complaints') }}"
+                    class="view-all-link"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if recent_complaints %}
+
+                <div class="complaint-grid">
+
+                    {% for complaint in recent_complaints %}
+
+                        <div class="complaint-card">
+
+                            <div class="complaint-card-header">
+
+                                <span class="complaint-id">
+
+                                    #{{ complaint[0] }}
+
+                                </span>
+
+                                <span
+                                    class="status-badge status-{{ complaint[9] | lower | replace(' ', '-') }}"
+                                >
+
+                                    {{ complaint[9] }}
+
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+
+                                {{ complaint[2] }}
+
+                            </h3>
+
+
+                            <p class="complaint-description">
+
+                                {{ complaint[3] }}
+
+                            </p>
+
+
+                            <div class="complaint-meta">
+
+                                <span>
+                                    📍 {{ complaint[5] }}
+                                </span>
+
+                                <span>
+                                    ⚠️ {{ complaint[4] }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="complaint-card-footer">
+
+                                <span>
+                                    {{ complaint[8] }} Priority
+                                </span>
+
+                                <a
+                                    href="{{ url_for(
+                                        'citizen.complaint_details',
+                                        complaint_id=complaint[0]
+                                    ) }}"
+                                >
+                                    View Details
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📭
+                    </div>
+
+                    <h3>
+                        No Complaints Yet
+                    </h3>
+
+                    <p>
+                        You haven't submitted any civic complaints yet.
+                    </p>
+
+                    <a
+                        href="{{ url_for('citizen.report_issue') }}"
+                        class="btn btn-primary"
+                    >
+                        Report Your First Issue
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ==========================
+             Quick Actions
+        =========================== -->
+
+        <div class="dashboard-section">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <div class="quick-actions">
+
+                <a
+                    href="{{ url_for('citizen.report_issue') }}"
+                    class="quick-action-card"
+                >
+
+                    <span class="quick-action-icon">
+                        📝
+                    </span>
+
+                    <span>
+                        Report an Issue
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('citizen.my_complaints') }}"
+                    class="quick-action-card"
+                >
+
+                    <span class="quick-action-icon">
+                        📋
+                    </span>
+
+                    <span>
+                        My Complaints
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('public.categories') }}"
+                    class="quick-action-card"
+                >
+
+                    <span class="quick-action-icon">
+                        🗂️
+                    </span>
+
+                    <span>
+                        Complaint Categories
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

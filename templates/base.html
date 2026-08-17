@@ -18,44 +18,123 @@
 
     </title>
 
-    <!-- Main CSS -->
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- ==========================
+         Main CSS
+    =========================== -->
 
-    <!-- Home CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/main.css'
+        ) }}"
+    >
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/home.css') }}">
 
-    <!-- Authentication CSS -->
+    <!-- ==========================
+         Home CSS
+    =========================== -->
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/auth.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/home.css'
+        ) }}"
+    >
 
-    <!-- Forms CSS -->
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/forms.css') }}">
+    <!-- ==========================
+         Authentication CSS
+    =========================== -->
 
-    <!-- Responsive CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/auth.css'
+        ) }}"
+    >
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <!-- ==========================
+         Forms CSS
+    =========================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/forms.css'
+        ) }}"
+    >
+
+
+    <!-- ==========================
+         Citizen CSS
+    =========================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/citizen.css'
+        ) }}"
+    >
+
+
+    <!-- ==========================
+         Timeline CSS
+    =========================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/timeline.css'
+        ) }}"
+    >
+
+
+    <!-- ==========================
+         Responsive CSS
+    =========================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/responsive.css'
+        ) }}"
+    >
 
 </head>
 
+
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+
+    <!-- ==========================
+         NAVBAR
+    =========================== -->
 
     <header>
 
         <nav class="navbar">
 
+
+            <!-- ==========================
+                 Logo
+            =========================== -->
+
             <div class="logo">
 
-                <a href="{{ url_for('public.home') }}">
+                <a
+                    href="{{ url_for(
+                        'public.home'
+                    ) }}"
+                >
 
                     CivicPulse
 
@@ -63,11 +142,21 @@
 
             </div>
 
+
+            <!-- ==========================
+                 Navigation Links
+            =========================== -->
+
             <ul class="nav-links">
+
 
                 <li>
 
-                    <a href="{{ url_for('public.home') }}">
+                    <a
+                        href="{{ url_for(
+                            'public.home'
+                        ) }}"
+                    >
 
                         Home
 
@@ -75,9 +164,14 @@
 
                 </li>
 
+
                 <li>
 
-                    <a href="{{ url_for('public.about') }}">
+                    <a
+                        href="{{ url_for(
+                            'public.about'
+                        ) }}"
+                    >
 
                         About
 
@@ -85,9 +179,14 @@
 
                 </li>
 
+
                 <li>
 
-                    <a href="{{ url_for('public.how_it_works') }}">
+                    <a
+                        href="{{ url_for(
+                            'public.how_it_works'
+                        ) }}"
+                    >
 
                         How It Works
 
@@ -95,9 +194,14 @@
 
                 </li>
 
+
                 <li>
 
-                    <a href="{{ url_for('public.categories') }}">
+                    <a
+                        href="{{ url_for(
+                            'public.categories'
+                        ) }}"
+                    >
 
                         Categories
 
@@ -105,15 +209,55 @@
 
                 </li>
 
-                <!-- ================= Logged In ================= -->
 
                 {% if session.get("user_id") %}
 
+
                     {% if session.get("user_role") == "Citizen" %}
+
+                        <!-- Dashboard -->
 
                         <li>
 
-                            <a href="{{ url_for('citizen.report_issue') }}">
+                            <a
+                                href="{{ url_for(
+                                    'citizen.dashboard'
+                                ) }}"
+                            >
+
+                                Dashboard
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- My Complaints -->
+
+                        <li>
+
+                            <a
+                                href="{{ url_for(
+                                    'citizen.my_complaints'
+                                ) }}"
+                            >
+
+                                My Complaints
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Report Issue -->
+
+                        <li>
+
+                            <a
+                                href="{{ url_for(
+                                    'citizen.report_issue'
+                                ) }}"
+                            >
 
                                 Report Issue
 
@@ -123,6 +267,9 @@
 
                     {% endif %}
 
+
+                    <!-- Logged-in User -->
+
                     <li>
 
                         <span>
@@ -131,7 +278,9 @@
 
                             <strong>
 
-                                {{ session.get("user_name") }}
+                                {{ session.get(
+                                    "user_name"
+                                ) }}
 
                             </strong>
 
@@ -139,9 +288,16 @@
 
                     </li>
 
+
+                    <!-- Logout -->
+
                     <li>
 
-                        <a href="{{ url_for('auth.logout') }}">
+                        <a
+                            href="{{ url_for(
+                                'auth.logout'
+                            ) }}"
+                        >
 
                             Logout
 
@@ -149,11 +305,19 @@
 
                     </li>
 
+
                 {% else %}
+
+
+                    <!-- Login -->
 
                     <li>
 
-                        <a href="{{ url_for('auth.login') }}">
+                        <a
+                            href="{{ url_for(
+                                'auth.login'
+                            ) }}"
+                        >
 
                             Login
 
@@ -161,15 +325,23 @@
 
                     </li>
 
+
+                    <!-- Register -->
+
                     <li>
 
-                        <a href="{{ url_for('auth.register') }}">
+                        <a
+                            href="{{ url_for(
+                                'auth.register'
+                            ) }}"
+                        >
 
                             Register
 
                         </a>
 
                     </li>
+
 
                 {% endif %}
 
@@ -179,9 +351,16 @@
 
     </header>
 
-    <!-- ================= Flash Messages ================= -->
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- ==========================
+         FLASH MESSAGES
+    =========================== -->
+
+    {% with messages =
+        get_flashed_messages(
+            with_categories=true
+        )
+    %}
 
         {% if messages %}
 
@@ -189,7 +368,12 @@
 
                 {% for category, message in messages %}
 
-                    <div class="flash-message flash-{{ category }}">
+                    <div
+                        class="
+                            flash-message
+                            flash-{{ category }}
+                        "
+                    >
 
                         {{ message }}
 
@@ -203,7 +387,10 @@
 
     {% endwith %}
 
-    <!-- ================= Page Content ================= -->
+
+    <!-- ==========================
+         PAGE CONTENT
+    =========================== -->
 
     <main>
 
@@ -213,23 +400,45 @@
 
     </main>
 
-    <!-- ================= Footer ================= -->
+
+    <!-- ==========================
+         FOOTER
+    =========================== -->
 
     <footer>
 
         <p>
 
-            © 2026 CivicPulse | Smart Civic Complaint Management System
+            © 2026 CivicPulse |
+            Smart Civic Complaint Management System
 
         </p>
 
     </footer>
 
-    <!-- ================= JavaScript ================= -->
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- ==========================
+         Main JavaScript
+    =========================== -->
 
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script
+        src="{{ url_for(
+            'static',
+            filename='js/main.js'
+        ) }}"
+    ></script>
+
+
+    <!-- ==========================
+         Authentication JavaScript
+    =========================== -->
+
+    <script
+        src="{{ url_for(
+            'static',
+            filename='js/auth.js'
+        ) }}"
+    ></script>
 
 </body>
 

@@ -56,8 +56,11 @@ Desktop.ini
 # Uploaded Files
 # ==========================================
 
-static/uploads/*
-!static/uploads/.gitkeep
+static/uploads/complaint_images/*
+!static/uploads/complaint_images/.gitkeep
+
+static/uploads/resolution_proofs/*
+!static/uploads/resolution_proofs/.gitkeep
 
 # ==========================================
 # Images Folder (Keep Folder Structure)
