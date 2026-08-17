@@ -147,8 +147,9 @@ CivicPulse follows a **layered Flask architecture**.
                          │ COMPLAINTS           │
                          │ STATUS_HISTORY       │
                          └──────────────────────┘
+---
 
-🔄 Complaint Submission Flow
+## 🔄 Complaint Submission Flow
 
 The complaint submission process follows this flow:
 
