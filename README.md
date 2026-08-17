@@ -147,9 +147,9 @@ CivicPulse follows a **layered Flask architecture**.
                          │ COMPLAINTS           │
                          │ STATUS_HISTORY       │
                          └──────────────────────┘
----
 
-## 🔄 Complaint Submission Flow
+<table> <tr> <td>
+ 🔄 Complaint Submission Flow
 
 The complaint submission process follows this flow:
 
@@ -198,8 +198,12 @@ Complaint Created
    ▼
 Citizen Dashboard
 
-🖼️ Complaint Image Upload Flow
+</td> </tr> </table>
 
+
+<table> <tr> <td>
+
+## 🖼️ Complaint Image Upload Flow
 Citizen
    │
    ▼
@@ -223,6 +227,7 @@ Store Image Path
 Oracle COMPLAINTS
 The actual image file is stored in the application's upload directory, while the corresponding image path is stored in Oracle.
 
+</td> </tr> </table>
 
 📊 Complaint Tracking Flow
 Citizen
