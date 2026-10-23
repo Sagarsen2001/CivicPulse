@@ -84,8 +84,8 @@ def categories():
 # User Dashboard
 # ==========================================
 
-@login_required
 @public_bp.route("/dashboard")
+@login_required
 def dashboard():
 
     return render_template(
@@ -99,8 +99,8 @@ def dashboard():
 # User Profile
 # ==========================================
 
-@login_required
 @public_bp.route("/profile")
+@login_required
 def profile():
 
     return render_template(

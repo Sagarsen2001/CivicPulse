@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+Municipal Workers Directory | Admin | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<section class="admin-dashboard">
+
+    <div class="admin-header">
+        <div>
+            <h1>Municipal Field Workers</h1>
+            <p>Monitor field staff assignments, operational workload, and task completion metrics.</p>
+        </div>
+        <a href="{{ url_for('admin.complaints') }}" class="btn btn-secondary">
+            View All Complaints
+        </a>
+    </div>
+
+    <!-- Workers Grid / Table -->
+    {% if workers %}
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Worker ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Total Assigned</th>
+                    <th>Currently In Progress</th>
+                    <th>Resolved Tasks</th>
+                    <th>Workload Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in workers %}
+                <tr>
+                    <td><strong>#{{ w[0] }}</strong></td>
+                    <td><strong>👷 {{ w[1] }}</strong></td>
+                    <td>{{ w[2] }}</td>
+                    <td>{{ w[3] or 'N/A' }}</td>
+                    <td><span class="badge-count">{{ w[5] }}</span></td>
+                    <td><span class="badge-count badge-warning">{{ w[6] }}</span></td>
+                    <td><span class="badge-count badge-success">{{ w[7] }}</span></td>
+                    <td>
+                        {% if w[6] >= 5 %}
+                            <span class="status-badge status-high-load">High Load</span>
+                        {% elif w[6] >= 1 %}
+                            <span class="status-badge status-medium-load">Active</span>
+                        {% else %}
+                            <span class="status-badge status-low-load">Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">👷</div>
+        <h3>No Workers Found</h3>
+        <p>No active workers are registered in the municipal system.</p>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

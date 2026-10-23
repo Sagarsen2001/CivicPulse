@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin.css') }}">
+
+
+<section class="admin-dashboard">
+
+    <!-- ================================= -->
+    <!-- Dashboard Header -->
+    <!-- ================================= -->
+
+    <div class="admin-header">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Monitor and manage civic complaints
+            across CivicPulse.
+        </p>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Statistics Cards -->
+    <!-- ================================= -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Total Complaints</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.total }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>Pending</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.pending }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>Verified</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.verified }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>Assigned</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.assigned }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>In Progress</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.in_progress }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>Resolved</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.resolved }}
+            </p>
+        </div>
+
+
+        <div class="stat-card">
+            <h3>Rejected</h3>
+
+            <p class="stat-number">
+                {{ dashboard_data.statistics.rejected }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Charts -->
+    <!-- ================================= -->
+
+    <div class="admin-charts">
+
+        <div class="chart-card">
+
+            <h2>Complaints by Status</h2>
+
+            <div class="chart-container">
+
+                <canvas id="statusChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-card">
+
+            <h2>Complaints by Category</h2>
+
+            <div class="chart-container">
+
+                <canvas id="categoryChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Category Statistics -->
+    <!-- ================================= -->
+
+    <div class="category-section">
+
+        <h2>Category Statistics</h2>
+
+        <div class="category-list">
+
+            {% if dashboard_data.category_statistics %}
+
+                {% for category in dashboard_data.category_statistics %}
+
+                    <div class="category-item">
+
+                        <span>
+                            {{ category.category }}
+                        </span>
+
+                        <strong>
+                            {{ category.count }}
+                        </strong>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+                    No category data available.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================================= -->
+<!-- Chart.js -->
+<!-- ================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- ================================= -->
+<!-- Send Dashboard Data To JavaScript -->
+<!-- ================================= -->
+
+<script>
+
+    window.dashboardData = {{ dashboard_data | tojson }};
+
+</script>
+
+
+<!-- ================================= -->
+<!-- Admin Dashboard JavaScript -->
+<!-- ================================= -->
+
+<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+
+
+{% endblock %}

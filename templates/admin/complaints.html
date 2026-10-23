@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Complaints | Admin | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<section class="admin-dashboard">
+
+    <div class="admin-header">
+        <div>
+            <h1>Complaints Management</h1>
+            <p>Review, verify, reject, and assign citizen grievances across municipal departments.</p>
+        </div>
+        <a href="{{ url_for('admin.export_csv') }}" class="btn btn-secondary">
+            📥 Export to CSV
+        </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="admin-filter-bar">
+        <form method="GET" action="{{ url_for('admin.complaints') }}" class="filter-form">
+            <div class="filter-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" onchange="this.form.submit()">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>All Statuses</option>
+                    <option value="Pending" {% if current_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Verified" {% if current_status == 'Verified' %}selected{% endif %}>Verified</option>
+                    <option value="Assigned" {% if current_status == 'Assigned' %}selected{% endif %}>Assigned</option>
+                    <option value="In Progress" {% if current_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Resolved" {% if current_status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                    <option value="Rejected" {% if current_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="category_id">Category</label>
+                <select name="category_id" id="category_id" onchange="this.form.submit()">
+                    <option value="all" {% if current_category == 'all' %}selected{% endif %}>All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat[0] }}" {% if current_category|string == cat[0]|string %}selected{% endif %}>
+                            {{ cat[1] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="priority">Priority</label>
+                <select name="priority" id="priority" onchange="this.form.submit()">
+                    <option value="all" {% if current_priority == 'all' %}selected{% endif %}>All Priorities</option>
+                    <option value="High" {% if current_priority == 'High' %}selected{% endif %}>High</option>
+                    <option value="Medium" {% if current_priority == 'Medium' %}selected{% endif %}>Medium</option>
+                    <option value="Low" {% if current_priority == 'Low' %}selected{% endif %}>Low</option>
+                </select>
+            </div>
+
+            <div class="filter-group filter-search">
+                <label for="search">Search</label>
+                <input type="text" name="search" id="search" placeholder="Title, location, description..." value="{{ search_query }}">
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ url_for('admin.complaints') }}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Complaints Count Summary -->
+    <div class="table-meta-bar">
+        <span>Showing <strong>{{ complaints|length }}</strong> complaint(s)</span>
+    </div>
+
+    <!-- Complaints Table -->
+    {% if complaints %}
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Citizen</th>
+                    <th>Assigned To</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in complaints %}
+                <tr>
+                    <td><strong>#{{ c[0] }}</strong></td>
+                    <td>
+                        <span class="complaint-table-title">{{ c[1] }}</span>
+                    </td>
+                    <td><span class="category-pill">{{ c[9] }}</span></td>
+                    <td>
+                        <span class="priority-pill priority-{{ c[4]|lower }}">
+                            {{ c[4] }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ c[3]|lower|replace(' ', '-') }}">
+                            {{ c[3] }}
+                        </span>
+                    </td>
+                    <td>📍 {{ c[6] }}</td>
+                    <td>{{ c[10] }}</td>
+                    <td>
+                        {% if c[11] %}
+                            <span class="worker-assigned-tag">👷 {{ c[11] }}</span>
+                        {% else %}
+                            <span class="worker-unassigned-tag">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td><small>{{ c[7] }}</small></td>
+                    <td>
+                        <a href="{{ url_for('admin.complaint_detail', complaint_id=c[0]) }}" class="btn btn-sm btn-primary">
+                            Review
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No Complaints Found</h3>
+        <p>No complaints match the selected filter criteria.</p>
+        <a href="{{ url_for('admin.complaints') }}" class="btn btn-primary">Clear Filters</a>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

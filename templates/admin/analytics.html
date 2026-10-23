@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}
+Analytics & Reports | Admin | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<section class="admin-dashboard">
+
+    <div class="admin-header">
+        <div>
+            <h1>Municipal Analytics & Performance Reports</h1>
+            <p>Comprehensive grievance resolution metrics, SLA monitoring, and departmental performance.</p>
+        </div>
+        <div class="header-actions">
+            <a href="{{ url_for('admin.export_csv') }}" class="btn btn-secondary">
+                📥 Export Full Dataset (CSV)
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Complaints</h3>
+            <p class="stat-number">{{ dashboard_data.statistics.total }}</p>
+            <span class="stat-sub">Lifetime logged</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Resolved</h3>
+            <p class="stat-number text-success">{{ dashboard_data.statistics.resolved }}</p>
+            <span class="stat-sub">Successfully addressed</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Review</h3>
+            <p class="stat-number text-warning">{{ dashboard_data.statistics.pending }}</p>
+            <span class="stat-sub">Awaiting verification</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>In Progress</h3>
+            <p class="stat-number text-info">{{ dashboard_data.statistics.in_progress }}</p>
+            <span class="stat-sub">Field action active</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Resolution Rate</h3>
+            <p class="stat-number">
+                {% if dashboard_data.statistics.total > 0 %}
+                    {{ ((dashboard_data.statistics.resolved / dashboard_data.statistics.total) * 100)|round(1) }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </p>
+            <span class="stat-sub">Overall efficiency</span>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="admin-charts">
+        <div class="chart-card">
+            <h2>Complaints by Status</h2>
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2>Grievance Volume by Category</h2>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worker Productivity Table -->
+    <div class="dashboard-section">
+        <h2>Field Worker Workload & Productivity</h2>
+        {% if workers %}
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Worker</th>
+                        <th>Email</th>
+                        <th>Assigned Tasks</th>
+                        <th>Active Work</th>
+                        <th>Resolved Tasks</th>
+                        <th>Completion Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in workers %}
+                    <tr>
+                        <td><strong>👷 {{ w[1] }}</strong></td>
+                        <td>{{ w[2] }}</td>
+                        <td>{{ w[5] }}</td>
+                        <td>{{ w[6] }}</td>
+                        <td>{{ w[7] }}</td>
+                        <td>
+                            {% if w[5] > 0 %}
+                                <strong>{{ ((w[7] / w[5]) * 100)|round(1) }}%</strong>
+                            {% else %}
+                                <em>N/A</em>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No worker data recorded.</p>
+        {% endif %}
+    </div>
+
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dashboardData = {{ dashboard_data | tojson }};
+
+        // Status Chart
+        const statusCtx = document.getElementById("statusChart");
+        if (statusCtx && dashboardData.status_chart) {
+            new Chart(statusCtx, {
+                type: "doughnut",
+                data: {
+                    labels: dashboardData.status_chart.labels,
+                    datasets: [{
+                        data: dashboardData.status_chart.values,
+                        backgroundColor: [
+                            "#f59e0b", // Pending (amber)
+                            "#3b82f6", // Verified (blue)
+                            "#8b5cf6", // Assigned (purple)
+                            "#06b6d4", // In Progress (cyan)
+                            "#10b981", // Resolved (green)
+                            "#ef4444"  // Rejected (red)
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: "bottom" }
+                    }
+                }
+            });
+        }
+
+        // Category Chart
+        const categoryCtx = document.getElementById("categoryChart");
+        if (categoryCtx && dashboardData.category_statistics) {
+            const catLabels = dashboardData.category_statistics.map(c => c.category);
+            const catCounts = dashboardData.category_statistics.map(c => c.count);
+
+            new Chart(categoryCtx, {
+                type: "bar",
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        label: "Complaints Count",
+                        data: catCounts,
+                        backgroundColor: "#0f4c81",
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}
+

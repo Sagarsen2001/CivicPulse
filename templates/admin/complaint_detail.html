@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}
+Review Complaint #{{ complaint[0] }} | Admin | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/citizen.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/timeline.css') }}">
+
+<section class="admin-dashboard">
+
+    <div class="admin-header">
+        <div>
+            <h1>Review Complaint #{{ complaint[0] }}</h1>
+            <p>Departmental review, verification, priority calibration, and field worker dispatch.</p>
+        </div>
+        <a href="{{ url_for('admin.complaints') }}" class="btn btn-secondary">
+            ← Back to Complaints List
+        </a>
+    </div>
+
+    <div class="admin-detail-layout">
+
+        <!-- Left Column: Complaint Details & Timeline -->
+        <div class="detail-main-column">
+
+            <div class="complaint-details-card">
+                <div class="details-section">
+                    <div class="details-title-row">
+                        <div>
+                            <span class="details-label">Category: <strong>{{ complaint[15] }}</strong></span>
+                            <h2 class="complaint-detail-title">{{ complaint[3] }}</h2>
+                        </div>
+                        <div class="badge-cluster">
+                            <span class="status-badge status-{{ complaint[9]|lower|replace(' ', '-') }}">
+                                {{ complaint[9] }}
+                            </span>
+                            <span class="priority-pill priority-{{ complaint[8]|lower }}">
+                                Priority: {{ complaint[8] }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-row">
+                    <div class="details-item">
+                        <span class="details-label">Citizen</span>
+                        <span>👤 {{ complaint[16] }} ({{ complaint[17] }})</span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Assigned Worker</span>
+                        <span>
+                            {% if complaint[19] %}
+                                👷 {{ complaint[19] }} ({{ complaint[20] }})
+                            {% else %}
+                                <em>Unassigned</em>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Location</span>
+                        <span>📍 {{ complaint[6] }}</span>
+                    </div>
+                </div>
+
+                <div class="details-row">
+                    <div class="details-item">
+                        <span class="details-label">Severity Reported</span>
+                        <span>⚠️ {{ complaint[5] }}</span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Submitted On</span>
+                        <span>📅 {{ complaint[10] }}</span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Upvotes</span>
+                        <span>👍 {{ upvotes_count }} citizen upvotes</span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Description</h3>
+                    <p class="description-text">{{ complaint[4] }}</p>
+                </div>
+
+                <!-- Citizen Image -->
+                {% if complaint[7] %}
+                <div class="details-section">
+                    <h3>Citizen Uploaded Photo</h3>
+                    <div class="complaint-image-container">
+                        <img src="{{ url_for('static', filename=complaint[7]) }}" alt="Complaint Image" class="complaint-detail-image">
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Resolution Proof Image -->
+                {% if complaint[13] %}
+                <div class="details-section resolution-proof-box">
+                    <h3>✅ Worker Resolution Proof</h3>
+                    <p class="text-muted">Uploaded by field worker upon completing repairs.</p>
+                    <div class="complaint-image-container">
+                        <img src="{{ url_for('static', filename=complaint[13]) }}" alt="Resolution Proof" class="complaint-detail-image proof-image">
+                    </div>
+                    {% if complaint[14] %}
+                        <small>Resolved at: {{ complaint[14] }}</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Citizen Feedback -->
+                {% if feedback %}
+                <div class="details-section feedback-box">
+                    <h3>⭐ Citizen Feedback</h3>
+                    <div class="rating-display">
+                        Rating:
+                        {% for i in range(feedback[3]) %}★{% endfor %}
+                        {% for i in range(5 - feedback[3]) %}☆{% endfor %}
+                        ({{ feedback[3] }}/5)
+                    </div>
+                    {% if feedback[4] %}
+                        <p class="feedback-comment">"{{ feedback[4] }}"</p>
+                    {% endif %}
+                    <small>Submitted by {{ feedback[6] }} on {{ feedback[5] }}</small>
+                </div>
+                {% endif %}
+
+                <!-- Status Timeline -->
+                <div class="details-section">
+                    <h3>Status Audit Trail</h3>
+                    {% if status_history %}
+                    <div class="timeline">
+                        {% for h in status_history %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker">●</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>{{ h[3] }}</h4>
+                                    <span>{{ h[5] }}</span>
+                                </div>
+                                {% if h[2] %}
+                                    <p><small>Previous: {{ h[2] }}</small></p>
+                                {% endif %}
+                                {% if h[6] %}
+                                    <p>{{ h[6] }}</p>
+                                {% endif %}
+                                {% if h[7] %}
+                                    <small>Action by: {{ h[7] }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>No status history recorded yet.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right Column: Admin Actions & Dispatch Panel -->
+        <div class="detail-actions-column">
+
+            <!-- Action 1: Verify Complaint -->
+            {% if complaint[9] == 'Pending' %}
+            <div class="admin-action-card highlight-card">
+                <h3>1. Verification</h3>
+                <p>Confirm this is a legitimate civic issue that requires municipal action.</p>
+                <form method="POST" action="{{ url_for('admin.verify_complaint', complaint_id=complaint[0]) }}">
+                    <input type="text" name="remarks" placeholder="Optional notes for verification..." class="form-control">
+                    <button type="submit" class="btn btn-success btn-block mt-10">
+                        ✓ Verify Complaint
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- Action 2: Assign Field Worker -->
+            <div class="admin-action-card">
+                <h3>2. Assign Field Worker</h3>
+                <p>Dispatch an active municipal worker to investigate or resolve this issue.</p>
+                <form method="POST" action="{{ url_for('admin.assign_complaint', complaint_id=complaint[0]) }}">
+                    <div class="form-group">
+                        <label for="worker_id">Select Worker</label>
+                        <select name="worker_id" id="worker_id" class="form-control" required>
+                            <option value="">-- Choose Worker --</option>
+                            {% for w in workers %}
+                                <option value="{{ w[0] }}" {% if complaint[12]|string == w[0]|string %}selected{% endif %}>
+                                    {{ w[1] }} (Active: {{ w[5] }} tasks)
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        👷 Assign Worker
+                    </button>
+                </form>
+            </div>
+
+            <!-- Action 3: Priority Calibration -->
+            <div class="admin-action-card">
+                <h3>3. Priority Calibration</h3>
+                <p>Adjust the priority based on risk and public impact.</p>
+                <form method="POST" action="{{ url_for('admin.update_priority', complaint_id=complaint[0]) }}">
+                    <div class="form-group">
+                        <label for="priority">Priority Level</label>
+                        <select name="priority" id="priority" class="form-control">
+                            <option value="Low" {% if complaint[8] == 'Low' %}selected{% endif %}>Low</option>
+                            <option value="Medium" {% if complaint[8] == 'Medium' %}selected{% endif %}>Medium</option>
+                            <option value="High" {% if complaint[8] == 'High' %}selected{% endif %}>High</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">
+                        ⚡ Update Priority
+                    </button>
+                </form>
+            </div>
+
+            <!-- Action 4: Reject Complaint -->
+            {% if complaint[9] not in ['Resolved', 'Rejected'] %}
+            <div class="admin-action-card danger-card">
+                <h3>4. Reject Complaint</h3>
+                <p>Reject invalid, duplicate, or out-of-scope submissions.</p>
+                <form method="POST" action="{{ url_for('admin.reject_complaint', complaint_id=complaint[0]) }}">
+                    <div class="form-group">
+                        <label for="remarks">Reason for Rejection</label>
+                        <textarea name="remarks" id="remarks" rows="2" class="form-control" placeholder="Provide clear reason to citizen..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to reject this complaint?');">
+                        ✕ Reject Complaint
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

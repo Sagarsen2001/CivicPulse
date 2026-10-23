@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Task #{{ complaint[0] }} | Worker | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/worker.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/citizen.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/timeline.css') }}">
+
+<section class="worker-dashboard">
+
+    <div class="worker-header">
+        <div>
+            <h1>Assigned Task #{{ complaint[0] }}</h1>
+            <p>Update task progression, document field notes, and upload photo proof upon resolution.</p>
+        </div>
+        <a href="{{ url_for('worker.dashboard') }}" class="btn btn-secondary">
+            ← Back to Worker Dashboard
+        </a>
+    </div>
+
+    <div class="worker-detail-layout">
+
+        <!-- Left Column: Complaint Data & History -->
+        <div class="detail-main-column">
+
+            <div class="complaint-details-card">
+                <div class="details-section">
+                    <div class="details-title-row">
+                        <div>
+                            <span class="details-label">Category: <strong>{{ complaint[15] }}</strong></span>
+                            <h2 class="complaint-detail-title">{{ complaint[3] }}</h2>
+                        </div>
+                        <div class="badge-cluster">
+                            <span class="status-badge status-{{ complaint[9]|lower|replace(' ', '-') }}">
+                                {{ complaint[9] }}
+                            </span>
+                            <span class="priority-pill priority-{{ complaint[8]|lower }}">
+                                Priority: {{ complaint[8] }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-row">
+                    <div class="details-item">
+                        <span class="details-label">Citizen</span>
+                        <span>👤 {{ complaint[16] }} (Ph: {{ complaint[18] or 'Not provided' }})</span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Location</span>
+                        <span>📍 {{ complaint[6] }}</span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Reported Severity</span>
+                        <span>⚠️ {{ complaint[5] }}</span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Issue Description</h3>
+                    <p class="description-text">{{ complaint[4] }}</p>
+                </div>
+
+                <!-- Citizen Image -->
+                {% if complaint[7] %}
+                <div class="details-section">
+                    <h3>Citizen's Initial Photo</h3>
+                    <div class="complaint-image-container">
+                        <img src="{{ url_for('static', filename=complaint[7]) }}" alt="Citizen's photo" class="complaint-detail-image">
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Existing Resolution Proof -->
+                {% if complaint[13] %}
+                <div class="details-section resolution-proof-box">
+                    <h3>✅ Current Resolution Proof</h3>
+                    <p class="text-muted">Uploaded completion photographic proof.</p>
+                    <div class="complaint-image-container">
+                        <img src="{{ url_for('static', filename=complaint[13]) }}" alt="Resolution Proof" class="complaint-detail-image proof-image">
+                    </div>
+                    {% if complaint[14] %}
+                        <small>Resolved on: {{ complaint[14] }}</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Status Timeline -->
+                <div class="details-section">
+                    <h3>Status History & Notes</h3>
+                    {% if status_history %}
+                    <div class="timeline">
+                        {% for h in status_history %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker">●</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>{{ h[3] }}</h4>
+                                    <span>{{ h[5] }}</span>
+                                </div>
+                                {% if h[2] %}
+                                    <p><small>Previous Status: {{ h[2] }}</small></p>
+                                {% endif %}
+                                {% if h[6] %}
+                                    <p>{{ h[6] }}</p>
+                                {% endif %}
+                                {% if h[7] %}
+                                    <small>Recorded by: {{ h[7] }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>No history recorded yet.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right Column: Status Update & Proof Upload Actions -->
+        <div class="detail-actions-column">
+
+            {% if allowed_transitions %}
+            <!-- Action Form: Update Status -->
+            <div class="worker-action-card highlight-card">
+                <h3>Update Task Status</h3>
+                <p>Advance the status of this task through the standard workflow.</p>
+
+                <form method="POST" action="{{ url_for('worker.update_status', complaint_id=complaint[0]) }}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="new_status">Next Status</label>
+                        <select name="new_status" id="new_status" class="form-control" required onchange="toggleProofField(this.value)">
+                            {% for st in allowed_transitions %}
+                                <option value="{{ st }}">{{ st }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="remarks">Field Notes / Remarks</label>
+                        <textarea name="remarks" id="remarks" rows="3" class="form-control" placeholder="Describe actions taken or current progress..." required></textarea>
+                    </div>
+
+                    <!-- Resolution Proof Field (Shows when resolving) -->
+                    <div id="proofUploadSection" class="form-group" style="{% if 'Resolved' not in allowed_transitions %}display: none;{% endif %}">
+                        <label for="resolution_proof"><strong>Upload Resolution Proof (Photo)</strong></label>
+                        <input type="file" name="resolution_proof" id="resolution_proof" accept="image/png, image/jpeg, image/webp" class="form-control">
+                        <small class="form-hint">Accepted formats: JPG, PNG, WebP (Max 5MB)</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Submit Status Update
+                    </button>
+                </form>
+            </div>
+            {% elif complaint[9] == 'Resolved' %}
+            <div class="worker-action-card success-card">
+                <h3>Task Completed</h3>
+                <p>This complaint has been marked as <strong>Resolved</strong>.</p>
+                {% if not complaint[13] %}
+                <hr>
+                <h4>Upload Resolution Proof</h4>
+                <p>Attach a photo of the completed work for citizen verification.</p>
+                <form method="POST" action="{{ url_for('worker.upload_proof', complaint_id=complaint[0]) }}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="resolution_proof" accept="image/png, image/jpeg, image/webp" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">
+                        Upload Proof Photo
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="worker-action-card">
+                <h3>Task Status: {{ complaint[9] }}</h3>
+                <p>No further actions are required from your role at this time.</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    function toggleProofField(status) {
+        const proofSection = document.getElementById("proofUploadSection");
+        if (proofSection) {
+            if (status === "Resolved") {
+                proofSection.style.display = "block";
+            } else {
+                proofSection.style.display = "none";
+            }
+        }
+    }
+</script>
+
+{% endblock %}
+

@@ -143,7 +143,7 @@ def login():
 
                 return redirect(
 
-                    url_for("public.home")
+                    url_for("admin.dashboard")
 
                 )
 
@@ -151,7 +151,7 @@ def login():
 
                 return redirect(
 
-                    url_for("public.home")
+                    url_for("worker.dashboard")
 
                 )
 
@@ -159,7 +159,7 @@ def login():
 
                 return redirect(
 
-                    url_for("public.home")
+                    url_for("citizen.dashboard")
 
                 )
 

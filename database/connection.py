@@ -31,13 +31,13 @@ def get_connection():
             dsn=Config.ORACLE_DSN
         )
 
-        print("✅ Oracle Database Connected Successfully.")
+        print("[OK] Oracle Database Connected Successfully.")
 
         return connection
 
     except oracledb.DatabaseError as error:
 
-        print("❌ Database Connection Error:")
+        print("[ERROR] Database Connection Error:")
         print(error)
 
         return None
@@ -58,11 +58,11 @@ def close_connection(connection):
 
             connection.close()
 
-            print("✅ Oracle Database Connection Closed.")
+            print("[OK] Oracle Database Connection Closed.")
 
         except oracledb.DatabaseError as error:
 
-            print("❌ Error Closing Database Connection:")
+            print("[ERROR] Error Closing Database Connection:")
             print(error)
 
 

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}
+Worker Dashboard | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/worker.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<section class="worker-dashboard">
+
+    <div class="worker-header">
+        <div>
+            <h1>Field Worker Dashboard</h1>
+            <p>Welcome, <strong>{{ session.get('user_name', 'Field Worker') }}</strong>. Manage and resolve assigned municipal complaints.</p>
+        </div>
+        <div class="worker-status-badge">
+            <span class="status-indicator-dot"></span> Active on Duty
+        </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Assigned</h3>
+            <p class="stat-number">{{ summary.total }}</p>
+            <span class="stat-sub">Lifetime tasks</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>New Assignments</h3>
+            <p class="stat-number text-warning">{{ summary.assigned }}</p>
+            <span class="stat-sub">Pending action</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>In Progress</h3>
+            <p class="stat-number text-info">{{ summary.in_progress }}</p>
+            <span class="stat-sub">Currently working</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Resolved</h3>
+            <p class="stat-number text-success">{{ summary.resolved }}</p>
+            <span class="stat-sub">Work completed</span>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="worker-filter-bar">
+        <a href="{{ url_for('worker.dashboard', status='all') }}" class="filter-tab {% if current_status == 'all' %}active{% endif %}">
+            All Tasks ({{ summary.total }})
+        </a>
+        <a href="{{ url_for('worker.dashboard', status='Assigned') }}" class="filter-tab {% if current_status == 'Assigned' %}active{% endif %}">
+            Assigned ({{ summary.assigned }})
+        </a>
+        <a href="{{ url_for('worker.dashboard', status='In Progress') }}" class="filter-tab {% if current_status == 'In Progress' %}active{% endif %}">
+            In Progress ({{ summary.in_progress }})
+        </a>
+        <a href="{{ url_for('worker.dashboard', status='Resolved') }}" class="filter-tab {% if current_status == 'Resolved' %}active{% endif %}">
+            Resolved ({{ summary.resolved }})
+        </a>
+    </div>
+
+    <!-- Complaints Grid -->
+    {% if complaints %}
+    <div class="worker-complaints-grid">
+        {% for c in complaints %}
+        <div class="worker-task-card priority-border-{{ c[4]|lower }}">
+            <div class="task-card-header">
+                <span class="task-id">#{{ c[0] }}</span>
+                <span class="priority-pill priority-{{ c[4]|lower }}">{{ c[4] }} Priority</span>
+                <span class="status-badge status-{{ c[3]|lower|replace(' ', '-') }}">{{ c[3] }}</span>
+            </div>
+
+            <h3 class="task-title">{{ c[1] }}</h3>
+            <p class="task-desc">{{ c[2]|truncate(120) }}</p>
+
+            <div class="task-meta">
+                <span>🗂️ <strong>{{ c[9] }}</strong></span>
+                <span>📍 {{ c[6] }}</span>
+                <span>👤 Citizen: {{ c[10] }}</span>
+                <span>📅 Assigned: {{ c[7] }}</span>
+            </div>
+
+            {% if c[11] %}
+            <div class="task-image-thumbnail">
+                <img src="{{ url_for('static', filename=c[11]) }}" alt="Issue photo">
+            </div>
+            {% endif %}
+
+            <div class="task-card-footer">
+                <a href="{{ url_for('worker.complaint_detail', complaint_id=c[0]) }}" class="btn btn-primary btn-block">
+                    View & Update Status &rarr;
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🎉</div>
+        <h3>No Tasks Found</h3>
+        <p>You have no assigned tasks under the selected status filter.</p>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

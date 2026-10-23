@@ -10,273 +10,94 @@ Report Issue | CivicPulse
 
     <div class="form-container">
 
-        <h1>
-
-            Report a Civic Issue
-
-        </h1>
+        <h1>Report a Civic Issue</h1>
 
         <p class="form-subtitle">
-
             Fill in the details below to report a civic issue.
             Your complaint will be reviewed by the administration
-            and assigned to the appropriate department.
-
+            and assigned to the appropriate field worker.
         </p>
 
-        <form
+        <form id="complaintForm" method="POST" enctype="multipart/form-data">
 
-            id="complaintForm"
-
-            method="POST"
-
-            enctype="multipart/form-data"
-
-        >
-
-            <!-- ================= Title ================= -->
-
+            <!-- Title -->
             <div class="form-group">
-
-                <label for="title">
-
-                    Complaint Title
-
-                </label>
-
-                <input
-
-                    type="text"
-
-                    id="title"
-
-                    name="title"
-
-                    placeholder="Example: Large pothole near City Hospital"
-
-                    required
-
-                >
-
+                <label for="title">Complaint Title</label>
+                <input type="text" id="title" name="title" placeholder="Example: Large pothole near City Hospital" required>
             </div>
 
-            <!-- ================= Category ================= -->
-
+            <!-- Category -->
             <div class="form-group">
-
-                <label for="category">
-                    Category
-                </label>
-
-                <select
-                    id="category"
-                    name="category"
-                    required
-                >
-
-                    <option value="">
-                        Select Category
-                    </option>
-
-                    <option value="6">
-                        Pothole
-                    </option>
-
-                    <option value="7">
-                        Garbage
-                    </option>
-
-                    <option value="8">
-                        Street Light
-                    </option>
-
-                    <option value="9">
-                        Water Leakage
-                    </option>
-
-                    <option value="10">
-                        Drainage
-                    </option>
-
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="">Select Category</option>
+                    <option value="6">Pothole</option>
+                    <option value="7">Garbage</option>
+                    <option value="8">Street Light</option>
+                    <option value="9">Water Leakage</option>
+                    <option value="10">Drainage</option>
                 </select>
-
             </div>
-            <!-- ================= Severity ================= -->
 
+            <!-- Day 21: Duplicate Detection Alert Box -->
+            <div id="duplicateAlertBox" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 8px 0; color: #b45309; display: flex; align-items: center; gap: 6px;">
+                    ⚠️ Similar Existing Complaints Detected
+                </h4>
+                <p style="margin: 0 0 10px 0; font-size: 13px; color: #78350f;">
+                    A similar issue may have already been reported nearby. You may still proceed with your submission, or verify if your issue is already listed below:
+                </p>
+                <div id="duplicateList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+            </div>
+
+            <!-- Severity -->
             <div class="form-group">
-
-                <label for="severity">
-
-                    Severity
-
-                </label>
-
-                <select
-
-                    id="severity"
-
-                    name="severity"
-
-                    required
-
-                >
-
-                    <option value="">
-
-                        Select Severity
-
-                    </option>
-
-                    <option>
-
-                        Low
-
-                    </option>
-
-                    <option>
-
-                        Medium
-
-                    </option>
-
-                    <option>
-
-                        High
-
-                    </option>
-
-                    <option>
-
-                        Critical
-
-                    </option>
-
+                <label for="severity">Severity</label>
+                <select id="severity" name="severity" required>
+                    <option value="">Select Severity</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
                 </select>
-
             </div>
 
-            <!-- ================= Location ================= -->
-
+            <!-- Location & Geolocation -->
             <div class="form-group">
-
-                <label for="location">
-
-                    Location
-
-                </label>
-
-                <input
-
-                    type="text"
-
-                    id="location"
-
-                    name="location"
-
-                    placeholder="Enter complaint location"
-
-                    required
-
-                >
-
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label for="location" style="margin: 0;">Location</label>
+                    <button type="button" id="detectLocationBtn" class="btn btn-sm btn-secondary" style="padding: 3px 10px; font-size: 12px;">
+                        📍 Auto-Detect GPS
+                    </button>
+                </div>
+                <input type="text" id="location" name="location" placeholder="Enter landmark, street name, or area" required>
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+                <small id="gpsStatus" style="display: none; color: #059669; font-size: 12px; margin-top: 4px;"></small>
             </div>
 
-            <!-- ================= Description ================= -->
-
+            <!-- Description -->
             <div class="form-group">
-
-                <label for="description">
-
-                    Description
-
-                </label>
-
-                <textarea
-
-                    id="description"
-
-                    name="description"
-
-                    rows="6"
-
-                    placeholder="Describe the issue in detail..."
-
-                    required
-
-                ></textarea>
-
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="5" placeholder="Describe the issue in detail (at least 20 characters)..." required></textarea>
             </div>
 
-            <!-- ================= Image ================= -->
-
+            <!-- Image Upload -->
             <div class="form-group">
-
-                <label for="image">
-
-                    Upload Image
-
-                </label>
-
-                <input
-
-                    type="file"
-
-                    id="image"
-
-                    name="image"
-
-                    accept="image/*"
-
-                >
-
+                <label for="image">Upload Photo Evidence (Optional)</label>
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/webp">
+                <small style="color: #6b7280; font-size: 12px;">Supported: PNG, JPG, JPEG, WebP (Max 5MB)</small>
             </div>
 
-            <!-- ================= Preview ================= -->
-
+            <!-- Image Preview -->
             <div class="form-group">
-
-                <img
-
-                    id="previewImage"
-
-                    src=""
-
-                    alt="Image Preview"
-
-                    style="display:none; max-width:300px; border-radius:10px;"
-
-                >
-
+                <img id="previewImage" src="" alt="Image Preview" style="display:none; max-width:280px; border-radius:8px; border: 1px solid #ddd; margin-top: 8px;">
             </div>
 
-            <!-- ================= Buttons ================= -->
-
+            <!-- Buttons -->
             <div class="form-buttons">
-
-                <button
-
-                    type="submit"
-
-                    class="btn btn-primary"
-
-                >
-
-                    Submit Complaint
-
-                </button>
-
-                <button
-
-                    type="reset"
-
-                    class="btn btn-secondary"
-
-                >
-
-                    Reset
-
-                </button>
-
+                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
             </div>
 
         </form>
@@ -286,7 +107,102 @@ Report Issue | CivicPulse
 </section>
 
 <script src="{{ url_for('static', filename='js/complaint_form.js') }}"></script>
-
 <script src="{{ url_for('static', filename='js/image_preview.js') }}"></script>
+
+<!-- Day 21 & Day 24 Interactive Scripts -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Geolocation Auto-Detection
+        const detectBtn = document.getElementById("detectLocationBtn");
+        const latInput = document.getElementById("latitude");
+        const lngInput = document.getElementById("longitude");
+        const gpsStatus = document.getElementById("gpsStatus");
+        const locationInput = document.getElementById("location");
+
+        if (detectBtn && navigator.geolocation) {
+            detectBtn.addEventListener("click", function() {
+                detectBtn.innerText = "Detecting...";
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    latInput.value = pos.coords.latitude;
+                    lngInput.value = pos.coords.longitude;
+                    gpsStatus.innerText = "✓ Coordinates recorded (" + pos.coords.latitude.toFixed(4) + ", " + pos.coords.longitude.toFixed(4) + ")";
+                    gpsStatus.style.display = "block";
+                    detectBtn.innerText = "📍 GPS Captured";
+                    checkDuplicates();
+                }, function(err) {
+                    detectBtn.innerText = "📍 Auto-Detect GPS";
+                    gpsStatus.innerText = "Location permission denied or unavailable.";
+                    gpsStatus.style.color = "#dc2626";
+                    gpsStatus.style.display = "block";
+                });
+            });
+        }
+
+        // Duplicate Detection on Input Change
+        const titleInput = document.getElementById("title");
+        const descInput = document.getElementById("description");
+        const categorySelect = document.getElementById("category");
+        const alertBox = document.getElementById("duplicateAlertBox");
+        const listDiv = document.getElementById("duplicateList");
+
+        let debounceTimer = null;
+        function debounceCheck() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(checkDuplicates, 600);
+        }
+
+        titleInput.addEventListener("input", debounceCheck);
+        descInput.addEventListener("input", debounceCheck);
+        categorySelect.addEventListener("change", checkDuplicates);
+
+        function checkDuplicates() {
+            const title = titleInput.value.trim();
+            const desc = descInput.value.trim();
+            const cat = categorySelect.value;
+
+            if (title.length < 5 || !cat) {
+                alertBox.style.display = "none";
+                return;
+            }
+
+            fetch("/api/check-duplicates", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: title,
+                    description: desc,
+                    category_id: cat,
+                    latitude: latInput.value || null,
+                    longitude: lngInput.value || null
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.duplicates && data.duplicates.length > 0) {
+                    listDiv.innerHTML = "";
+                    data.duplicates.forEach(function(d) {
+                        const item = document.createElement("div");
+                        item.style.cssText = "background: white; padding: 8px 12px; border-radius: 6px; font-size: 13px; border: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;";
+                        item.innerHTML = `
+                            <div>
+                                <strong>#${d.complaint_id} ${d.title}</strong>
+                                <span style="font-size: 11px; background: #e5e7eb; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">${d.status}</span>
+                                <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">📍 ${d.location} &bull; ${d.reasons.join(", ")}</div>
+                            </div>
+                            <span style="font-weight: bold; color: #b45309; font-size: 12px;">${Math.round(d.similarity_score * 100)}% match</span>
+                        `;
+                        listDiv.appendChild(item);
+                    });
+                    alertBox.style.display = "block";
+                } else {
+                    alertBox.style.display = "none";
+                }
+            })
+            .catch(() => {
+                alertBox.style.display = "none";
+            });
+        }
+    });
+</script>
 
 {% endblock %}

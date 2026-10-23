@@ -215,54 +215,38 @@
 
                     {% if session.get("user_role") == "Citizen" %}
 
-                        <!-- Dashboard -->
-
                         <li>
-
-                            <a
-                                href="{{ url_for(
-                                    'citizen.dashboard'
-                                ) }}"
-                            >
-
-                                Dashboard
-
-                            </a>
-
+                            <a href="{{ url_for('citizen.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('citizen.my_complaints') }}">My Complaints</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('citizen.report_issue') }}">Report Issue</a>
                         </li>
 
-
-                        <!-- My Complaints -->
+                    {% elif session.get("user_role") == "Admin" %}
 
                         <li>
-
-                            <a
-                                href="{{ url_for(
-                                    'citizen.my_complaints'
-                                ) }}"
-                            >
-
-                                My Complaints
-
-                            </a>
-
+                            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.complaints') }}">Complaints</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.workers') }}">Workers</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.map_view') }}">Map</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.analytics_reports') }}">Analytics</a>
                         </li>
 
-
-                        <!-- Report Issue -->
+                    {% elif session.get("user_role") == "Worker" %}
 
                         <li>
-
-                            <a
-                                href="{{ url_for(
-                                    'citizen.report_issue'
-                                ) }}"
-                            >
-
-                                Report Issue
-
-                            </a>
-
+                            <a href="{{ url_for('worker.dashboard') }}">Worker Dashboard</a>
                         </li>
 
                     {% endif %}
@@ -346,6 +330,18 @@
                 {% endif %}
 
             </ul>
+            {% if session.get("role") == "Admin" %}
+
+                <a href="{{ url_for('admin.dashboard') }}">
+                    Admin Dashboard
+                </a>
+
+            {% endif %}
+            {% if session.get('role') == 'Admin' %}
+                <a href="{{ url_for('admin.dashboard') }}">
+                    Admin Dashboard
+                </a>
+            {% endif %}
 
         </nav>
 

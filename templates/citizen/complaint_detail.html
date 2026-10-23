@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Complaint Details | CivicPulse
+Complaint #{{ complaint[0] }} Details | CivicPulse
 {% endblock %}
 
 {% block content %}
@@ -15,27 +15,14 @@ Complaint Details | CivicPulse
         =========================================== -->
 
         <div class="dashboard-header">
-
             <div>
-
-                <h1>
-                    Complaint #{{ complaint[0] }}
-                </h1>
-
-                <p>
-                    Track the details and current progress
-                    of your civic complaint.
-                </p>
-
+                <h1>Complaint #{{ complaint[0] }}</h1>
+                <p>Track the details, assignment, and progress of your civic complaint.</p>
             </div>
 
-            <a
-                href="{{ url_for('citizen.my_complaints') }}"
-                class="btn btn-secondary"
-            >
+            <a href="{{ url_for('citizen.my_complaints') }}" class="btn btn-secondary">
                 ← Back to My Complaints
             </a>
-
         </div>
 
 
@@ -45,352 +32,203 @@ Complaint Details | CivicPulse
 
         <div class="complaint-details-card">
 
-
-            <!-- ======================================
-                 Complaint Title
-            ======================================= -->
-
+            <!-- Title & Status Header -->
             <div class="details-section">
-
                 <div class="details-title-row">
-
                     <div>
-
                         <span class="details-label">
-                            Complaint ID
+                            Category: <strong>{{ complaint[15] }}</strong>
                         </span>
-
                         <div class="complaint-id-copy">
-
-                            <strong id="complaintId">
-                                #{{ complaint[0] }}
-                            </strong>
-
-                            <button
-                                type="button"
-                                id="copyComplaintId"
-                                class="copy-btn"
-                                title="Copy Complaint ID"
-                            >
-                                📋
-                            </button>
-
+                            <strong id="complaintId">#{{ complaint[0] }}</strong>
                         </div>
-
                     </div>
 
-                    <span
-                        class="
-                            status-badge
-                            status-{{ complaint[9]|lower|replace(' ', '-') }}
-                        "
-                    >
-                        {{ complaint[9] }}
-                    </span>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span class="status-badge status-{{ complaint[9]|lower|replace(' ', '-') }}">
+                            {{ complaint[9] }}
+                        </span>
 
+                        <!-- Day 22: Upvote Button -->
+                        <form method="POST" action="{{ url_for('citizen.upvote_complaint', complaint_id=complaint[0]) }}" style="margin: 0;">
+                            <button type="submit" class="btn btn-sm {% if has_upvoted %}btn-primary{% else %}btn-secondary{% endif %}" title="Upvote this complaint">
+                                👍 {% if has_upvoted %}Upvoted{% else %}Upvote{% endif %} ({{ upvotes_count }})
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 <h2 class="complaint-detail-title">
                     {{ complaint[3] }}
                 </h2>
-
             </div>
 
 
-            <!-- ======================================
-                 Complaint Summary
-            ======================================= -->
-
+            <!-- Complaint Summary Metrics -->
             <div class="details-row">
-
                 <div class="details-item">
-
-                    <span class="details-label">
-                        Severity
-                    </span>
-
-                    <span>
-                        {{ complaint[5] }}
-                    </span>
-
+                    <span class="details-label">Severity</span>
+                    <span>⚠️ {{ complaint[5] }}</span>
                 </div>
 
-
                 <div class="details-item">
-
-                    <span class="details-label">
-                        Priority
-                    </span>
-
-                    <span>
-                        {{ complaint[8] }}
-                    </span>
-
+                    <span class="details-label">Priority</span>
+                    <span>⭐ {{ complaint[8] }} Priority</span>
                 </div>
 
-
                 <div class="details-item">
-
-                    <span class="details-label">
-                        Location
-                    </span>
-
+                    <span class="details-label">Assigned Worker</span>
                     <span>
-                        📍 {{ complaint[6] }}
+                        {% if complaint[19] %}
+                            👷 {{ complaint[19] }}
+                        {% else %}
+                            <em>Awaiting Assignment</em>
+                        {% endif %}
                     </span>
-
                 </div>
 
+                <div class="details-item">
+                    <span class="details-label">Location</span>
+                    <span>📍 {{ complaint[6] }}</span>
+                </div>
             </div>
 
 
-            <!-- ======================================
-                 Description
-            ======================================= -->
-
+            <!-- Description -->
             <div class="details-section">
-
-                <h3>
-                    Description
-                </h3>
-
-                <p>
-                    {{ complaint[4] }}
-                </p>
-
+                <h3>Description</h3>
+                <p>{{ complaint[4] }}</p>
             </div>
 
 
-            <!-- ======================================
-                 Complaint Image
-            ======================================= -->
-
+            <!-- Citizen's Uploaded Image -->
             {% if complaint[7] %}
-
-                <div class="details-section">
-
-                    <h3>
-                        Complaint Image
-                    </h3>
-
-                    <div class="complaint-image-container">
-
-                        <img
-                            src="{{ url_for(
-                                'static',
-                                filename=complaint[7]
-                            ) }}"
-                            alt="Complaint Image"
-                            class="complaint-detail-image"
-                            id="complaintImage"
-                        >
-
-                    </div>
-
+            <div class="details-section">
+                <h3>Complaint Image</h3>
+                <div class="complaint-image-container">
+                    <img src="{{ url_for('static', filename=complaint[7]) }}" alt="Complaint Image" class="complaint-detail-image" id="complaintImage">
                 </div>
-
+            </div>
             {% endif %}
 
 
-            <!-- ======================================
-                 Image Modal
-            ======================================= -->
-
-            <div
-                id="imageModal"
-                class="image-modal"
-                style="display: none;"
-            >
-
-                <div class="image-modal-content">
-
-                    <button
-                        type="button"
-                        id="closeImageModal"
-                        class="close-modal"
-                    >
-                        &times;
-                    </button>
-
-                    <img
-                        id="modalImage"
-                        src=""
-                        alt="Complaint Image"
-                    >
-
+            <!-- Day 18 & 19: Worker Resolution Proof Image -->
+            {% if complaint[13] %}
+            <div class="details-section" style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #166534; margin-top: 0;">✅ Resolution Proof from Field Worker</h3>
+                <p style="color: #15803d; font-size: 14px;">The municipal worker has completed the repair and submitted photographic proof below:</p>
+                <div class="complaint-image-container">
+                    <img src="{{ url_for('static', filename=complaint[13]) }}" alt="Resolution Proof" class="complaint-detail-image" style="border: 2px solid #22c55e;">
                 </div>
-
+                {% if complaint[14] %}
+                    <p style="font-size: 13px; color: #166534; margin-top: 8px;"><strong>Resolved On:</strong> {{ complaint[14] }}</p>
+                {% endif %}
             </div>
+            {% endif %}
 
 
-            <!-- ======================================
-                 Timeline
-            ======================================= -->
+            <!-- Day 22: Citizen Resolution Feedback -->
+            {% if complaint[9] == 'Resolved' %}
+            <div class="details-section" style="background: #fffbeb; border: 1px solid #fde68a; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #92400e; margin-top: 0;">⭐ Citizen Resolution Feedback</h3>
+                {% if feedback %}
+                    <p style="margin-bottom: 5px;"><strong>Your Rating:</strong>
+                        {% for i in range(feedback[3]) %}★{% endfor %}
+                        {% for i in range(5 - feedback[3]) %}☆{% endfor %}
+                        ({{ feedback[3] }}/5)
+                    </p>
+                    {% if feedback[4] %}
+                        <p style="color: #78350f;"><em>"{{ feedback[4] }}"</em></p>
+                    {% endif %}
+                    <small style="color: #b45309;">Submitted on {{ feedback[5] }}</small>
+                {% else %}
+                    <p style="color: #78350f; font-size: 14px;">Please rate the quality of resolution provided by the municipal team:</p>
+                    <form method="POST" action="{{ url_for('citizen.submit_feedback', complaint_id=complaint[0]) }}">
+                        <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: center;">
+                            <label for="rating" style="font-weight: bold; color: #78350f;">Rating:</label>
+                            <select name="rating" id="rating" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #d97706;">
+                                <option value="5">★★★★★ (5 - Excellent)</option>
+                                <option value="4">★★★★☆ (4 - Good)</option>
+                                <option value="3">★★★☆☆ (3 - Average)</option>
+                                <option value="2">★★☆☆☆ (2 - Poor)</option>
+                                <option value="1">★☆☆☆☆ (1 - Very Poor)</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <textarea name="comments" rows="2" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #d97706;" placeholder="Share your experience or feedback..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                    </form>
+                {% endif %}
+            </div>
+            {% endif %}
 
+
+            <!-- Status Timeline -->
             <div class="details-section">
-
-                <h3>
-                    Complaint Timeline
-                </h3>
+                <h3>Complaint Timeline</h3>
 
                 {% if status_history %}
-
                     <div class="timeline">
-
                         {% for history in status_history %}
-
                             <div class="timeline-item">
-
                                 <div class="timeline-marker">
-
-                                    {% if loop.last %}
-                                        ✓
-                                    {% else %}
-                                        ●
-                                    {% endif %}
-
+                                    {% if loop.last %}✓{% else %}●{% endif %}
                                 </div>
 
                                 <div class="timeline-content">
-
                                     <div class="timeline-header">
-
-                                        <h4>
-                                            {{ history[3] }}
-                                        </h4>
-
-                                        <span>
-                                            {{ history[5] }}
-                                        </span>
-
+                                        <h4>{{ history[3] }}</h4>
+                                        <span>{{ history[5] }}</span>
                                     </div>
 
                                     {% if history[2] %}
-
-                                        <p>
-
-                                            Previous Status:
-                                            <strong>
-                                                {{ history[2] }}
-                                            </strong>
-
-                                        </p>
-
+                                        <p>Previous Status: <strong>{{ history[2] }}</strong></p>
                                     {% endif %}
 
                                     {% if history[6] %}
-
-                                        <p>
-                                            {{ history[6] }}
-                                        </p>
-
+                                        <p>{{ history[6] }}</p>
                                     {% endif %}
 
-                                    {% if history[4] %}
-
-                                        <small>
-                                            Changed by:
-                                            {{ history[4] }}
-                                        </small>
-
+                                    {% if history[7] %}
+                                        <small>Action by: {{ history[7] }}</small>
                                     {% endif %}
-
                                 </div>
-
                             </div>
-
                         {% endfor %}
-
                     </div>
-
                 {% else %}
-
                     <div class="timeline-empty">
-
-                        <div class="empty-icon">
-                            ⏳
-                        </div>
-
-                        <h4>
-                            No Status Updates Yet
-                        </h4>
-
-                        <p>
-                            Your complaint is currently
-                            awaiting its first status update.
-                        </p>
-
+                        <div class="empty-icon">⏳</div>
+                        <h4>No Status Updates Yet</h4>
+                        <p>Your complaint is currently awaiting its first status update.</p>
                     </div>
-
                 {% endif %}
-
             </div>
 
 
-            <!-- ======================================
-                 Dates
-            ======================================= -->
-
+            <!-- Timestamps -->
             <div class="details-row">
-
                 <div class="details-item">
-
-                    <span class="details-label">
-                        Submitted On
-                    </span>
-
-                    <span>
-                        {{ complaint[10] }}
-                    </span>
-
+                    <span class="details-label">Submitted On</span>
+                    <span>{{ complaint[10] }}</span>
                 </div>
 
-
                 <div class="details-item">
-
-                    <span class="details-label">
-                        Last Updated
-                    </span>
-
-                    <span>
-
-                        {% if complaint[11] %}
-
-                            {{ complaint[11] }}
-
-                        {% else %}
-
-                            Not updated yet
-
-                        {% endif %}
-
-                    </span>
-
+                    <span class="details-label">Last Updated</span>
+                    <span>{{ complaint[11] or 'Not updated yet' }}</span>
                 </div>
-
             </div>
 
 
-            <!-- ======================================
-                 Actions
-            ======================================= -->
-
+            <!-- Actions -->
             <div class="details-actions">
-
-                <a
-                    href="{{ url_for('citizen.my_complaints') }}"
-                    class="btn btn-secondary"
-                >
+                <a href="{{ url_for('citizen.my_complaints') }}" class="btn btn-secondary">
                     Back to My Complaints
                 </a>
-
-                <a
-                    href="{{ url_for('citizen.report_issue') }}"
-                    class="btn btn-primary"
-                >
+                <a href="{{ url_for('citizen.report_issue') }}" class="btn btn-primary">
                     Report Another Issue
                 </a>
-
             </div>
 
         </div>
@@ -398,17 +236,5 @@ Complaint Details | CivicPulse
     </div>
 
 </section>
-
-
-<!-- ==========================================
-     Complaint Detail JavaScript
-=========================================== -->
-
-<script
-    src="{{ url_for(
-        'static',
-        filename='js/complaint_detail.js'
-    ) }}"
-></script>
 
 {% endblock %}

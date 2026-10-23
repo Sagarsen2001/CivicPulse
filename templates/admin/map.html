@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+Geographic Complaint Map | Admin | CivicPulse
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<section class="admin-dashboard">
+
+    <div class="admin-header">
+        <div>
+            <h1>Geographic Complaint Map</h1>
+            <p>Spatial visualization of geo-tagged civic complaints across city wards.</p>
+        </div>
+        <div class="header-actions">
+            <span class="badge-count">{{ markers|length }} Geo-Tagged Issues</span>
+            <a href="{{ url_for('admin.complaints') }}" class="btn btn-secondary">Table View</a>
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div class="map-card">
+        <div id="complaintMap" style="height: 580px; width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"></div>
+    </div>
+
+</section>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const markersData = {{ markers | tojson }};
+
+        // Default center: Warangal, Telangana (coordinates used in sample data) or first marker
+        let defaultLat = 17.9784;
+        let defaultLng = 79.5941;
+
+        if (markersData.length > 0) {
+            defaultLat = markersData[0].lat;
+            defaultLng = markersData[0].lng;
+        }
+
+        const map = L.map('complaintMap').setView([defaultLat, defaultLng], 13);
+
+        // OpenStreetMap free tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Custom marker colors based on status
+        const statusColors = {
+            'Pending': '#eab308',
+            'Verified': '#3b82f6',
+            'Assigned': '#8b5cf6',
+            'In Progress': '#06b6d4',
+            'Resolved': '#10b981',
+            'Rejected': '#ef4444'
+        };
+
+        const bounds = [];
+
+        markersData.forEach(function(m) {
+            const color = statusColors[m.status] || '#6b7280';
+            const marker = L.circleMarker([m.lat, m.lng], {
+                radius: 9,
+                fillColor: color,
+                color: "#ffffff",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.85
+            }).addTo(map);
+
+            bounds.push([m.lat, m.lng]);
+
+            const popupContent = `
+                <div style="font-family: Arial, sans-serif; min-width: 200px;">
+                    <h4 style="margin: 0 0 5px 0; color: #0f4c81;">#${m.id} ${m.title}</h4>
+                    <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;"><strong>Category:</strong> ${m.category}</p>
+                    <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;"><strong>Location:</strong> 📍 ${m.location}</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px;"><strong>Status:</strong> <span style="background: ${color}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px;">${m.status}</span></p>
+                    <a href="/admin/complaint/${m.id}" style="display: inline-block; background: #0f4c81; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-decoration: none;">Review Complaint &rarr;</a>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+        });
+
+        if (bounds.length > 1) {
+            map.fitBounds(bounds, { padding: [40, 40] });
+        }
+    });
+</script>
+
+{% endblock %}
+

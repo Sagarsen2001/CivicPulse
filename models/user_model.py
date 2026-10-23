@@ -149,3 +149,37 @@ class UserModel:
         connection.close()
 
         return user
+
+    @staticmethod
+    def get_all_workers():
+        """
+        Get all users with Worker role, along with task statistics.
+        """
+        connection = get_connection()
+        if connection is None:
+            return []
+
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                """
+                SELECT
+                    U.USER_ID,
+                    U.FULL_NAME,
+                    U.EMAIL,
+                    U.PHONE_NUMBER,
+                    U.ROLE,
+                    COUNT(C.COMPLAINT_ID) AS ASSIGNED_COUNT,
+                    SUM(CASE WHEN C.STATUS = 'In Progress' THEN 1 ELSE 0 END) AS IN_PROGRESS_COUNT,
+                    SUM(CASE WHEN C.STATUS = 'Resolved' THEN 1 ELSE 0 END) AS RESOLVED_COUNT
+                FROM USERS U
+                LEFT JOIN COMPLAINTS C ON U.USER_ID = C.ASSIGNED_TO
+                WHERE U.ROLE = 'Worker'
+                GROUP BY U.USER_ID, U.FULL_NAME, U.EMAIL, U.PHONE_NUMBER, U.ROLE
+                ORDER BY U.FULL_NAME
+                """
+            )
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            connection.close()
