@@ -1,6 +1,55 @@
-# 🚀 CivicPulse — Smart Citizen Grievance Management System
+# 🏛️ CivicPulse — Smart Citizen Grievance Management System
 
-> **A Complete Full-Stack Civic Complaint Management Platform** built with **Python 3, Flask, Oracle Database (FREEPDB1), Machine Learning (Sentence Transformers / TF-IDF), HTML5, CSS3, JavaScript, Leaflet Maps, and Chart.js**.
+<div align="center">
+
+<!-- Dual-Tone Obsidian Tech Stack Badges -->
+<p align="center">
+  <a href="https://python.org">
+    <img src="https://img.shields.io/badge/Backend-Python_3.13_%7C_Flask-6366F1?style=for-the-badge&logo=python&logoColor=white&labelColor=0B0F19" alt="Python & Flask"/>
+  </a>
+  <a href="https://www.oracle.com/database/">
+    <img src="https://img.shields.io/badge/Database-Oracle_Free_%7C_FREEPDB1-E11D48?style=for-the-badge&logo=oracle&logoColor=white&labelColor=0B0F19" alt="Oracle Database"/>
+  </a>
+  <a href="https://sbert.net">
+    <img src="https://img.shields.io/badge/AI_Engine-SBERT_%2B_TF--IDF-D946EF?style=for-the-badge&logo=huggingface&logoColor=white&labelColor=0B0F19" alt="SBERT AI"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://leafletjs.com">
+    <img src="https://img.shields.io/badge/GIS_Mapping-Leaflet_%2B_Haversine_100m-06B6D4?style=for-the-badge&logo=openstreetmap&logoColor=white&labelColor=0B0F19" alt="Geospatial Mapping"/>
+  </a>
+  <a href="tests/test_civicpulse.py">
+    <img src="https://img.shields.io/badge/Test_Suite-16%2F16_Passed_•_100%25-10B981?style=for-the-badge&logo=pytest&logoColor=white&labelColor=0B0F19" alt="Tests 100% Passed"/>
+  </a>
+  <a href="https://www.nitw.ac.in">
+    <img src="https://img.shields.io/badge/NIT_Warangal-MCA_Final_Project-F59E0B?style=for-the-badge&logo=googleacademic&logoColor=white&labelColor=0B0F19" alt="NIT Warangal"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="#-role-based-access-control-rbac--security-architecture">
+    <img src="https://img.shields.io/badge/Security-RBAC_Hardened_%7C_PBKDF2-F97316?style=for-the-badge&logo=auth0&logoColor=white&labelColor=0B0F19" alt="Security RBAC"/>
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT_Open_Source-8B5CF6?style=for-the-badge&logo=open-source-initiative&logoColor=white&labelColor=0B0F19" alt="MIT License"/>
+  </a>
+</p>
+
+<h3 align="center">
+  🌐 Next-Generation Municipal Grievance Redressal & Spatial Workflow Platform
+</h3>
+
+<p align="center">
+  <em>Automated AI Duplicate Detection • Field Worker Dispatch • Photographic Resolution Proof • Real-Time Spatial GIS</em>
+</p>
+
+</div>
+
+---
+
+> [!NOTE]
+> **Academic Project Submission:** Developed as an **MCA Final & Placement Project** by **Sagarsen Sethi** at the **National Institute of Technology Warangal**.
 
 ---
 
@@ -8,12 +57,11 @@
 
 **CivicPulse** is an enterprise-grade digital civic governance solution designed for municipal corporations to streamline citizen grievance registration, automated duplicate issue detection, administrative verification, field worker dispatch, photographic resolution proof tracking, and real-time municipal performance analytics.
 
-Developed as an **MCA Placement & Final Project** by **Sagar Sen Sethi** at the **National Institute of Technology Warangal**.
-
 ---
 
 ## 🏗️ System Architecture & Data Flow
 
+> [!TIP]
 > 📖 **Full Architectural Specification:** For deep technical details, UML sequence flows, and ML pipeline mathematics, see [**docs/system_architecture.md**](docs/system_architecture.md).  
 > 🗄️ **Relational Schema Specification:** For the complete 8-table Oracle schema, column types, and constraints, see [**docs/database_design.md**](docs/database_design.md).
 
@@ -22,29 +70,29 @@ Developed as an **MCA Placement & Final Project** by **Sagar Sen Sethi** at the 
 ```mermaid
 flowchart TD
     subgraph Clients["User Personas & Devices"]
-        Citizen["👤 Citizen\n(Web Browser / Mobile)"]
-        Admin["👮 Municipal Admin\n(Admin Console)"]
-        Worker["👷 Field Worker\n(Mobile / Tablet View)"]
+        Citizen["👤 Citizen<br/>Web Browser or Mobile"]
+        Admin["👮 Municipal Admin<br/>Admin Management Console"]
+        Worker["👷 Field Worker<br/>Field Task Execution Portal"]
     end
 
     subgraph Presentation["Presentation & Routing Tier"]
-        UI["Flask Blueprints & Jinja2 Templates\n(/public, /auth, /citizen, /admin, /worker, /api)"]
-        SecMW["Security Middleware\n(RBAC Decorators, Session, Security Headers)"]
+        UI["Flask Blueprints & Jinja2 Templates<br/>Public, Auth, Citizen, Admin, Worker, API"]
+        SecMW["Security Middleware<br/>RBAC Decorators, Session, Security Headers"]
     end
 
     subgraph ServiceTier["Service & Business Logic Tier"]
-        AuthSvc["AuthService\n(PBKDF2 Hashing)"]
-        CompSvc["ComplaintService\n(State Machine Engine)"]
-        DupSvc["DuplicateDetectionService\n(SBERT + TF-IDF + GPS)"]
-        AnalytSvc["AnalyticsService\n(Metrics & CSV Export)"]
-        NotifSvc["NotificationService\n(In-App & SMTP Engine)"]
-        ImgSvc["ImageService\n(UUID Validation & Storage)"]
+        AuthSvc["AuthService<br/>PBKDF2 Password Hashing"]
+        CompSvc["ComplaintService<br/>State Machine Engine"]
+        DupSvc["DuplicateDetectionService<br/>SBERT + TF-IDF + GPS"]
+        AnalytSvc["AnalyticsService<br/>Metrics & CSV Generator"]
+        NotifSvc["NotificationService<br/>In-App & SMTP Engine"]
+        ImgSvc["ImageService<br/>UUID Validation & Storage"]
     end
 
     subgraph DataTier["Data Persistence & Inference"]
-        OracleDB[("Oracle Database XE / Free\n(FREEPDB1 : 1521)\n8 Relational Tables")]
-        FileSystem[("Static File Storage\n(Uploads & Resolution Proofs)")]
-        MLModel["Sentence-Transformers\n(all-MiniLM-L6-v2)"]
+        OracleDB[("Oracle Database XE or Free<br/>FREEPDB1 Relational DB")]
+        FileSystem[("Static File Storage<br/>Uploads & Proofs")]
+        MLModel["Sentence-Transformers<br/>all-MiniLM-L6-v2"]
     end
 
     Citizen --> UI
@@ -74,7 +122,7 @@ flowchart TD
 stateDiagram-v2
     [*] --> Pending : Citizen lodges complaint
     Pending --> Verified : Admin verifies validity
-    Pending --> Rejected : Admin rejects (invalid/spam)
+    Pending --> Rejected : Admin rejects spam or invalid
     Verified --> Assigned : Admin dispatches worker
     Assigned --> In_Progress : Worker starts field repair
     In_Progress --> Resolved : Worker uploads photo proof
@@ -295,7 +343,7 @@ The complete automated test suite (`tests/test_civicpulse.py`) validates:
 
 ## 👨‍💻 Author & Academic Submission
 
-- **Student:** Sagar Sen Sethi
+- **Student:** Sagarsen Sethi
 - **Program:** Master of Computer Applications (MCA)
 - **Institution:** National Institute of Technology Warangal
 - **GitHub:** [https://github.com/Sagarsen2001](https://github.com/Sagarsen2001)

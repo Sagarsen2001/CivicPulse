@@ -46,35 +46,35 @@ The following diagram illustrates the interactions between user roles, external 
 ```mermaid
 flowchart TD
     subgraph Actors["User Personas"]
-        Citizen["👤 Citizen\n(Web Browser / Mobile)"]
-        Admin["👮 Municipal Administrator\n(Admin Console)"]
-        Worker["👷 Field Worker\n(Mobile / Tablet View)"]
+        Citizen["👤 Citizen<br/>Web Browser or Mobile"]
+        Admin["👮 Municipal Administrator<br/>Admin Management Console"]
+        Worker["👷 Field Worker<br/>Field Task Execution Portal"]
     end
 
     subgraph ClientLayer["Frontend Presentation Layer"]
-        UI_Citizen["Citizen UI\n(Jinja2 / CSS3 / Leaflet Map)"]
-        UI_Admin["Admin Analytics UI\n(Chart.js / DataTables)"]
-        UI_Worker["Worker UI\n(Task Board / Camera Upload)"]
+        UI_Citizen["Citizen UI<br/>Jinja2, CSS3, Leaflet Map"]
+        UI_Admin["Admin Analytics UI<br/>Chart.js, DataTables"]
+        UI_Worker["Worker UI<br/>Task Board, Camera Upload"]
     end
 
     subgraph Gateway["Application Gateway & Routing"]
-        WebGateway["Flask WSGI Application Engine\n(Port 5000)"]
-        SecurityMW["Security Middleware\n(RBAC / Session / HTTP Headers)"]
+        WebGateway["Flask WSGI Application Engine<br/>Port 5000"]
+        SecurityMW["Security Middleware<br/>RBAC, Session, HTTP Headers"]
     end
 
     subgraph ServiceLayer["Service & Business Logic Tier"]
-        AuthSvc["AuthService\n(PBKDF2 Password Hashing)"]
-        CompSvc["ComplaintService\n(State Machine & Workflows)"]
-        DupSvc["DuplicateDetectionService\n(SBERT + TF-IDF + Haversine)"]
-        AnalytSvc["AnalyticsService\n(Chart Metrics & CSV Generator)"]
-        NotifSvc["NotificationService\n(In-App & SMTP Engine)"]
-        ImgSvc["ImageService\n(UUID Validation & Resizing)"]
+        AuthSvc["AuthService<br/>PBKDF2 Password Hashing"]
+        CompSvc["ComplaintService<br/>State Machine & Workflows"]
+        DupSvc["DuplicateDetectionService<br/>SBERT + TF-IDF + Haversine"]
+        AnalytSvc["AnalyticsService<br/>Chart Metrics & CSV Generator"]
+        NotifSvc["NotificationService<br/>In-App & SMTP Engine"]
+        ImgSvc["ImageService<br/>UUID Validation & Resizing"]
     end
 
     subgraph DataLayer["Persistence & Machine Learning Models"]
-        OracleDB[("Oracle Database XE/Free\n(FREEPDB1:1521)\n8 Relational Tables")]
-        FileSystem[("Static Media Storage\n(Uploads / Resolution Proofs)")]
-        MLModels["Pretrained SBERT Model\n(all-MiniLM-L6-v2)"]
+        OracleDB[("Oracle Database XE or Free<br/>FREEPDB1 Relational DB")]
+        FileSystem[("Static Media Storage<br/>Uploads and Resolution Proofs")]
+        MLModels["Pretrained SBERT Model<br/>all-MiniLM-L6-v2"]
     end
 
     Citizen --> UI_Citizen
@@ -247,83 +247,83 @@ erDiagram
     COMPLAINTS ||--o| COMPLAINT_FEEDBACK : "evaluated_by"
 
     USERS {
-        NUMBER USER_ID PK "Identity"
-        VARCHAR2 FULL_NAME "Not Null"
-        VARCHAR2 EMAIL "Unique, Not Null"
-        VARCHAR2 USER_PASSWORD "Hash, Not Null"
-        VARCHAR2 PHONE_NUMBER "Nullable"
-        VARCHAR2 ROLE "Citizen | Admin | Worker"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
+        number USER_ID PK "Identity"
+        string FULL_NAME "Full Name"
+        string EMAIL UK "Unique Email"
+        string USER_PASSWORD "Hashed Password"
+        string PHONE_NUMBER "Contact Number"
+        string ROLE "Citizen Admin or Worker"
+        timestamp CREATED_AT "Registration Time"
     }
 
     ISSUE_CATEGORIES {
-        NUMBER CATEGORY_ID PK "Identity (IDs 6-10)"
-        VARCHAR2 CATEGORY_NAME "Unique, Not Null"
-        VARCHAR2 DESCRIPTION "Nullable"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
+        number CATEGORY_ID PK "Category ID 6 to 10"
+        string CATEGORY_NAME UK "Unique Title"
+        string DESCRIPTION "Category Details"
+        timestamp CREATED_AT "Creation Time"
     }
 
     COMPLAINTS {
-        NUMBER COMPLAINT_ID PK "Identity"
-        NUMBER USER_ID FK "Citizen reference"
-        NUMBER CATEGORY_ID FK "Category reference"
-        VARCHAR2 TITLE "Not Null"
-        VARCHAR2 DESCRIPTION "Not Null"
-        VARCHAR2 SEVERITY "Low | Medium | High | Critical"
-        VARCHAR2 LOCATION "Not Null"
-        NUMBER LATITUDE "GPS Float (10,7)"
-        NUMBER LONGITUDE "GPS Float (10,7)"
-        VARCHAR2 IMAGE_PATH "Initial photo path"
-        VARCHAR2 STATUS "Pending|Verified|Assigned|In Progress|Resolved|Rejected"
-        VARCHAR2 PRIORITY "Low | Medium | High | Critical"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
-        TIMESTAMP UPDATED_AT "Last modified"
-        NUMBER ASSIGNED_TO FK "Worker reference"
-        VARCHAR2 RESOLUTION_PROOF "After photo path"
-        TIMESTAMP RESOLVED_AT "Resolution timestamp"
+        number COMPLAINT_ID PK "Identity"
+        number USER_ID FK "Reporting Citizen"
+        number CATEGORY_ID FK "Issue Category"
+        string TITLE "Issue Headline"
+        string DESCRIPTION "Detailed Narrative"
+        string SEVERITY "Low Med High Critical"
+        string LOCATION "Street Address"
+        number LATITUDE "GPS Latitude"
+        number LONGITUDE "GPS Longitude"
+        string IMAGE_PATH "Initial Photo Path"
+        string STATUS "Current State"
+        string PRIORITY "Low Med High Critical"
+        timestamp CREATED_AT "Submission Time"
+        timestamp UPDATED_AT "Last Modified"
+        number ASSIGNED_TO FK "Assigned Field Worker"
+        string RESOLUTION_PROOF "After Photo Path"
+        timestamp RESOLVED_AT "Resolution Time"
     }
 
     STATUS_HISTORY {
-        NUMBER HISTORY_ID PK "Identity"
-        NUMBER COMPLAINT_ID FK "Complaint reference"
-        VARCHAR2 OLD_STATUS "Previous status"
-        VARCHAR2 NEW_STATUS "New status"
-        NUMBER CHANGED_BY FK "User reference"
-        TIMESTAMP CHANGED_AT "Default Current_Timestamp"
-        VARCHAR2 REMARKS "Transition audit notes"
+        number HISTORY_ID PK "Identity"
+        number COMPLAINT_ID FK "Complaint Reference"
+        string OLD_STATUS "Previous State"
+        string NEW_STATUS "New State"
+        number CHANGED_BY FK "Actor User ID"
+        timestamp CHANGED_AT "Transition Time"
+        string REMARKS "Audit Notes"
     }
 
     COMPLAINT_IMAGES {
-        NUMBER IMAGE_ID PK "Identity"
-        NUMBER COMPLAINT_ID FK "Complaint reference"
-        VARCHAR2 IMAGE_PATH "Filesystem relative path"
-        VARCHAR2 IMAGE_TYPE "COMPLAINT | RESOLUTION"
-        TIMESTAMP UPLOADED_AT "Default Current_Timestamp"
+        number IMAGE_ID PK "Identity"
+        number COMPLAINT_ID FK "Complaint Reference"
+        string IMAGE_PATH "Filesystem Path"
+        string IMAGE_TYPE "COMPLAINT or RESOLUTION"
+        timestamp UPLOADED_AT "Upload Time"
     }
 
     NOTIFICATIONS {
-        NUMBER NOTIFICATION_ID PK "Identity"
-        NUMBER USER_ID FK "Recipient user"
-        NUMBER COMPLAINT_ID FK "Linked complaint"
-        VARCHAR2 MESSAGE "Text content"
-        NUMBER IS_READ "0 = Unread, 1 = Read"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
+        number NOTIFICATION_ID PK "Identity"
+        number USER_ID FK "Recipient User ID"
+        number COMPLAINT_ID FK "Complaint Reference"
+        string MESSAGE "Notification Content"
+        number IS_READ "0 Unread 1 Read"
+        timestamp CREATED_AT "Creation Time"
     }
 
     COMPLAINT_UPVOTES {
-        NUMBER UPVOTE_ID PK "Identity"
-        NUMBER COMPLAINT_ID FK "Complaint reference"
-        NUMBER USER_ID FK "User reference"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
+        number UPVOTE_ID PK "Identity"
+        number COMPLAINT_ID FK "Complaint Reference"
+        number USER_ID FK "Voter User ID"
+        timestamp CREATED_AT "Upvote Time"
     }
 
     COMPLAINT_FEEDBACK {
-        NUMBER FEEDBACK_ID PK "Identity"
-        NUMBER COMPLAINT_ID FK "Unique per complaint"
-        NUMBER USER_ID FK "Citizen reference"
-        NUMBER RATING "1 to 5 Stars"
-        VARCHAR2 COMMENTS "Feedback text"
-        TIMESTAMP CREATED_AT "Default Current_Timestamp"
+        number FEEDBACK_ID PK "Identity"
+        number COMPLAINT_ID FK "Unique per Complaint"
+        number USER_ID FK "Citizen User ID"
+        number RATING "1 to 5 Stars"
+        string COMMENTS "Feedback Text"
+        timestamp CREATED_AT "Review Time"
     }
 ```
 
@@ -335,41 +335,12 @@ The grievance workflow enforces strict state progression rules. Arbitrary status
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Pending : Citizen submits complaint (Initial state)
-
-    state "Pending" as Pending {
-        description: Awaiting administrative review
-    }
-
-    Pending --> Verified : Admin approves complaint\n(Valid issue confirmed)
-    Pending --> Rejected : Admin rejects complaint\n(Spam, invalid, or outside jurisdiction)
-
-    state "Verified" as Verified {
-        description: Validated issue ready for assignment
-    }
-
-    Verified --> Assigned : Admin assigns to Field Worker\n(ASSIGNED_TO updated, Worker notified)
-
-    state "Assigned" as Assigned {
-        description: Dispatched to worker task queue
-    }
-
-    Assigned --> In_Progress : Worker starts field operation\n(Status updated via Worker Portal)
-
-    state "In_Progress" as In_Progress {
-        description: Physical maintenance underway
-    }
-
-    In_Progress --> Resolved : Worker uploads photo proof & marks complete\n(RESOLUTION_PROOF saved, Citizen notified)
-
-    state "Resolved" as Resolved {
-        description: Problem solved, Citizen can rate & upvote
-    }
-
-    state "Rejected" as Rejected {
-        description: Grievance dismissed with administrative reason
-    }
-
+    [*] --> Pending : Citizen lodges grievance
+    Pending --> Verified : Admin verifies validity
+    Pending --> Rejected : Admin rejects spam or invalid
+    Verified --> Assigned : Admin assigns field worker
+    Assigned --> In_Progress : Worker starts field operation
+    In_Progress --> Resolved : Worker uploads photo proof
     Resolved --> [*]
     Rejected --> [*]
 ```
@@ -397,47 +368,56 @@ flowchart TD
         Title["Complaint Title"]
         Desc["Complaint Description"]
         Cat["Category ID"]
-        GPS["GPS Coordinates (Lat, Lon)"]
+        GPS["GPS Coordinates Lat and Lon"]
     end
 
     subgraph Step1["1. Database Candidate Retrieval"]
-        CandidateFilter["Query Open Complaints in Same Category\n(STATUS != 'Resolved' AND STATUS != 'Rejected')"]
+        CandidateFilter["Query Open Complaints in Same Category<br/>STATUS not in Resolved, Rejected"]
     end
 
     subgraph Step2["2. Geospatial Haversine Filter"]
-        CalcDist["Calculate Spherical Distance\nvia Haversine Equation"]
+        CalcDist["Calculate Spherical Distance<br/>via Haversine Equation"]
         ProximityCheck{"Distance <= 100 meters?"}
-        SpatialScore["Compute Spatial Similarity Score\n(1.0 - distance / 100.0)"]
+        SpatialScore["Compute Spatial Similarity Score<br/>1.0 - distance / 100.0"]
         SpatialPass["Spatial Proximity Flag = True"]
-        SpatialFail["Spatial Proximity Flag = False\n(No Location Overlap)"]
+        SpatialFail["Spatial Proximity Flag = False<br/>No Location Overlap"]
     end
 
     subgraph Step3["3. Hybrid NLP Semantic Engine"]
-        CheckSBERT{"Is Sentence-Transformers\n(SBERT) Available?"}
-        SBERT_Flow["Dense Semantic Embeddings\nModel: all-MiniLM-L6-v2\n384-dimensional dense vectors"]
-        TFIDF_Flow["Sparse TF-IDF Vectorizer\n+ Cosine Similarity Fallback\n(scikit-learn)"]
-        TextScore["Compute Semantic Similarity Score [0.0, 1.0]"]
+        CheckSBERT{"Is Sentence-Transformers<br/>SBERT Available?"}
+        SBERT_Flow["Dense Semantic Embeddings<br/>Model: all-MiniLM-L6-v2<br/>384-dimensional dense vectors"]
+        TFIDF_Flow["Sparse TF-IDF Vectorizer<br/>plus Cosine Similarity Fallback"]
+        TextScore["Compute Semantic Similarity Score 0.0 to 1.0"]
     end
 
     subgraph Step4["4. Composite Scoring & Decision"]
-        CompositeCalc["Composite Score Formula:\nScore = (0.6 * SemanticScore) + (0.4 * SpatialScore)"]
-        DuplicateDecision{"Composite Score >= 0.65\nOR (Semantic >= 0.75 AND Spatial = True)?"}
-        AlertUser["Return AJAX Duplicate Alert (HTTP 200)\nWarn Citizen with Existing Complaint ID & Title"]
-        Proceed["Allow New Submission"]
+        CompositeCalc["Composite Score Formula<br/>Score = 0.6 Semantic + 0.4 Spatial"]
+        DuplicateDecision{"Composite Score >= 0.65<br/>or High Text and Spatial Match?"}
+        AlertUser["Return AJAX Duplicate Alert HTTP 200<br/>Warn Citizen with Existing Issue Details"]
+        Proceed["Allow New Grievance Submission"]
     end
 
-    Title & Desc & Cat & GPS --> CandidateFilter
+    Title --> CandidateFilter
+    Desc --> CandidateFilter
+    Cat --> CandidateFilter
+    GPS --> CandidateFilter
+
     CandidateFilter --> CalcDist
     CalcDist --> ProximityCheck
-    ProximityCheck -- Yes --> SpatialScore --> SpatialPass
+    ProximityCheck -- Yes --> SpatialScore
+    SpatialScore --> SpatialPass
     ProximityCheck -- No --> SpatialFail
 
-    Title & Desc --> CheckSBERT
-    CheckSBERT -- Yes --> SBERT_Flow --> TextScore
-    CheckSBERT -- No --> TFIDF_Flow --> TextScore
+    Title --> CheckSBERT
+    Desc --> CheckSBERT
+    CheckSBERT -- Yes --> SBERT_Flow
+    SBERT_Flow --> TextScore
+    CheckSBERT -- No --> TFIDF_Flow
+    TFIDF_Flow --> TextScore
 
-    SpatialPass & TextScore --> CompositeCalc
-    SpatialFail & TextScore --> CompositeCalc
+    SpatialPass --> CompositeCalc
+    SpatialFail --> CompositeCalc
+    TextScore --> CompositeCalc
 
     CompositeCalc --> DuplicateDecision
     DuplicateDecision -- Yes --> AlertUser
@@ -466,30 +446,30 @@ CivicPulse implements multi-layered defensive security ensuring complete role is
 
 ```mermaid
 flowchart TD
-    Request["Incoming HTTP Request"] --> SecHeaders["HTTP Security Headers Filter\n• X-Content-Type-Options: nosniff\n• X-Frame-Options: SAMEORIGIN\n• X-XSS-Protection: 1; mode=block"]
+    Request["Incoming HTTP Request"] --> SecHeaders["HTTP Security Headers Filter<br/>nosniff, SAMEORIGIN, XSS-Protection"]
     
-    SecHeaders --> SessionCheck{"Session Authenticated?\n(session['user_id'] present)"}
+    SecHeaders --> SessionCheck{"Session Authenticated?<br/>session user_id present"}
     
-    SessionCheck -- No --> PublicRoute{"Is Route Public?\n(/, /about, /auth/*)"}
+    SessionCheck -- No --> PublicRoute{"Is Route Public?<br/>public, about, auth"}
     PublicRoute -- Yes --> ServePublic["Serve Public Response"]
-    PublicRoute -- No --> RedirectLogin["Redirect to /auth/login\n(Flash: 'Please login first')"]
+    PublicRoute -- No --> RedirectLogin["Redirect to Login Portal"]
 
-    SessionCheck -- Yes --> RoleDecorator{"Role Verification\n(@role_required Decorator)"}
+    SessionCheck -- Yes --> RoleDecorator{"Role Verification<br/>role_required Decorator"}
     
-    RoleDecorator -- "Role == 'Citizen'" --> CitizenGate{"Target Route in\n/citizen/* OR /api/*?"}
-    RoleDecorator -- "Role == 'Admin'" --> AdminGate{"Target Route in\n/admin/* OR /api/*?"}
-    RoleDecorator -- "Role == 'Worker'" --> WorkerGate{"Target Route in\n/worker/* OR /api/*?"}
+    RoleDecorator -- "Role == Citizen" --> CitizenGate{"Target Route in Citizen or API"}
+    RoleDecorator -- "Role == Admin" --> AdminGate{"Target Route in Admin or API"}
+    RoleDecorator -- "Role == Worker" --> WorkerGate{"Target Route in Worker or API"}
 
     CitizenGate -- Authorized --> Controller["Execute Blueprint Controller"]
     AdminGate -- Authorized --> Controller
     WorkerGate -- Authorized --> Controller
 
-    CitizenGate -- Forbidden --> Abort403["Abort 403 Forbidden\n(Unauthorized Role Access)"]
+    CitizenGate -- Forbidden --> Abort403["Abort 403 Forbidden<br/>Unauthorized Role Access"]
     AdminGate -- Forbidden --> Abort403
     WorkerGate -- Forbidden --> Abort403
 
-    Controller --> ParamSQL["Parameterized SQL Execution\n(:param_name named binds)"]
-    ParamSQL --> Oracle["Oracle Database (FREEPDB1)"]
+    Controller --> ParamSQL["Parameterized SQL Execution<br/>Named bind parameters"]
+    ParamSQL --> Oracle["Oracle Database FREEPDB1"]
 ```
 
 ### Access Control Matrix
@@ -665,33 +645,33 @@ CivicPulse is optimized for deployment on standalone server instances or cloud v
 ```mermaid
 flowchart LR
     subgraph Clients["Client Tier"]
-        Desktop["Desktop Browsers\n(Chrome, Edge, Firefox)"]
-        Mobile["Mobile Smart Devices\n(Android / iOS Web)"]
+        Desktop["Desktop Browsers<br/>Chrome, Edge, Firefox"]
+        Mobile["Mobile Smart Devices<br/>Android, iOS Web"]
     end
 
-    subgraph ServerTier["Application Host (Localhost / VM)"]
+    subgraph ServerTier["Application Host Localhost or VM"]
         subgraph WebServer["WSGI Web Server"]
-            Flask["Flask Application Instance\n(Python 3.10+, oracledb, Jinja2)"]
+            Flask["Flask Application Instance<br/>Python 3.10+, oracledb, Jinja2"]
         end
 
         subgraph Storage["File Storage"]
-            UploadsComplaints["/static/uploads/complaints/"]
-            UploadsProofs["/static/uploads/resolution_proofs/"]
+            UploadsComplaints["static/uploads/complaints/"]
+            UploadsProofs["static/uploads/resolution_proofs/"]
         end
 
         subgraph MLWorker["ML Computational Engine"]
-            PyTorch["PyTorch / Transformers\n(CPU Inference Engine)"]
+            PyTorch["PyTorch and Transformers<br/>CPU Inference Engine"]
         end
     end
 
     subgraph DatabaseTier["Database Host"]
-        OracleService["Oracle Database XE / Free\nService: FREEPDB1\nPort: 1521\nDedicated Relational Engine"]
+        OracleService["Oracle Database XE or Free<br/>Service: FREEPDB1 Port: 1521<br/>Dedicated Relational Engine"]
     end
 
-    Clients -->|HTTP / HTTPS Port 5000| Flask
-    Flask -->|File I/O| Storage
-    Flask -->|In-Process Vectorization| MLWorker
-    Flask -->|TCP/IP SQL Net Connections| OracleService
+    Clients --> Flask
+    Flask --> Storage
+    Flask --> MLWorker
+    Flask --> OracleService
 ```
 
 ---

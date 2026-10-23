@@ -73,7 +73,14 @@ Report Issue | CivicPulse
                 <input type="text" id="location" name="location" placeholder="Enter landmark, street name, or area" required>
                 <input type="hidden" id="latitude" name="latitude">
                 <input type="hidden" id="longitude" name="longitude">
-                <small id="gpsStatus" style="display: none; color: #059669; font-size: 12px; margin-top: 4px;"></small>
+                
+                <!-- Day 24 Interactive Map Pin Picker -->
+                <div id="locationPickerMap" style="height: 220px; width: 100%; border-radius: 8px; margin-top: 8px; border: 1px solid #cbd5e1; z-index: 1;"></div>
+                <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">
+                    💡 Click anywhere on the map to pin the exact issue location, or click <strong>"📍 Auto-Detect GPS"</strong> to use your current device location.
+                </small>
+                
+                <small id="gpsStatus" style="display: none; color: #059669; font-size: 12px; margin-top: 4px; font-weight: 500;"></small>
             </div>
 
             <!-- Description -->
@@ -106,27 +113,79 @@ Report Issue | CivicPulse
 
 </section>
 
+<!-- Leaflet CSS & JS for Interactive Map Picker -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/complaint_form.js') }}"></script>
 <script src="{{ url_for('static', filename='js/image_preview.js') }}"></script>
 
 <!-- Day 21 & Day 24 Interactive Scripts -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Geolocation Auto-Detection
         const detectBtn = document.getElementById("detectLocationBtn");
         const latInput = document.getElementById("latitude");
         const lngInput = document.getElementById("longitude");
         const gpsStatus = document.getElementById("gpsStatus");
         const locationInput = document.getElementById("location");
 
+        // Initialize Leaflet Map Picker (Default: Warangal, Telangana - 17.9784, 79.5941)
+        let defaultLat = 17.9784;
+        let defaultLng = 79.5941;
+        let map = null;
+        let pinMarker = null;
+
+        if (document.getElementById("locationPickerMap")) {
+            map = L.map('locationPickerMap').setView([defaultLat, defaultLng], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            function setCoordinates(lat, lng, zoomLevel) {
+                latInput.value = parseFloat(lat).toFixed(7);
+                lngInput.value = parseFloat(lng).toFixed(7);
+                gpsStatus.innerText = "✓ Coordinates recorded (" + parseFloat(lat).toFixed(4) + ", " + parseFloat(lng).toFixed(4) + ")";
+                gpsStatus.style.display = "block";
+                gpsStatus.style.color = "#059669";
+
+                if (!pinMarker) {
+                    pinMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+                    pinMarker.on('dragend', function(e) {
+                        const newPos = e.target.getLatLng();
+                        setCoordinates(newPos.lat, newPos.lng);
+                        checkDuplicates();
+                    });
+                } else {
+                    pinMarker.setLatLng([lat, lng]);
+                }
+
+                if (zoomLevel) {
+                    map.setView([lat, lng], zoomLevel);
+                }
+            }
+
+            // Click anywhere on map to drop pin
+            map.on('click', function(e) {
+                setCoordinates(e.latlng.lat, e.latlng.lng);
+                checkDuplicates();
+            });
+        }
+
+        // Geolocation Auto-Detection
         if (detectBtn && navigator.geolocation) {
             detectBtn.addEventListener("click", function() {
                 detectBtn.innerText = "Detecting...";
                 navigator.geolocation.getCurrentPosition(function(pos) {
-                    latInput.value = pos.coords.latitude;
-                    lngInput.value = pos.coords.longitude;
-                    gpsStatus.innerText = "✓ Coordinates recorded (" + pos.coords.latitude.toFixed(4) + ", " + pos.coords.longitude.toFixed(4) + ")";
-                    gpsStatus.style.display = "block";
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    if (typeof setCoordinates === "function") {
+                        setCoordinates(lat, lng, 16);
+                    } else {
+                        latInput.value = lat;
+                        lngInput.value = lng;
+                        gpsStatus.innerText = "✓ Coordinates recorded (" + lat.toFixed(4) + ", " + lng.toFixed(4) + ")";
+                        gpsStatus.style.display = "block";
+                    }
                     detectBtn.innerText = "📍 GPS Captured";
                     checkDuplicates();
                 }, function(err) {
